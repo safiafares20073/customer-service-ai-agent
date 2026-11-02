@@ -1,0 +1,40 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python environments, caches, and packaging outputs
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Runtime databases, customer data, and generated evidence
+data/
+logs/
+artifacts/
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.log
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Streamlit secrets and local editor settings
+.streamlit/secrets.toml
+.idea/
+.vscode/
+.DS_Store
