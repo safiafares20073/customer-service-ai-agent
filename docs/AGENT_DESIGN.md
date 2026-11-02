@@ -1,6 +1,7 @@
 # Supporting agent design and tool contracts
 
-Status: planned, not implemented. These details support [agent_spec.md](../agent_spec.md).
+Status: Phase 2 implements the storage, seven MCP tools, and trusted adapter.
+LLM-loop behavior and UI remain planned. These details support [agent_spec.md](../agent_spec.md).
 The official six-element summary is in that one-page specification; detailed
 security mechanisms here are project design choices, not additional book requirements.
 
@@ -17,13 +18,13 @@ execution, web browsing, and multi-agent delegation are out of scope.
 
 ## 2. Allowed tools: exactly seven
 
-The future server will use the official Python MCP SDK and a genuine MCP stdio
+The implemented server uses the official Python MCP SDK and a genuine MCP stdio
 transport. The agent must discover tools with MCP `list_tools` and invoke them
 with MCP `call_tool` through a client session. Direct Python handler calls do not
 constitute integration evidence. All arguments and results require validation;
 unknown tools and extra fields are rejected. No arbitrary SQL or URL inputs.
 
-Proposed contracts (schemas will be implemented in a later phase):
+Implemented wire contracts (schemas are discoverable through MCP `list_tools`):
 
 | Tool | Inputs | Successful output | Access and limits |
 | --- | --- | --- | --- |
@@ -58,6 +59,16 @@ rechecking authentication and linked-order access, even if its confirmation was
 already consumed; a different payload with the same key is rejected. For a new
 write, validate unexpired confirmation and atomically consume it together with
 ticket creation and idempotency recording. Failed writes must not consume consent.
+
+Phase 2 details: success responses use `{ok: true, data: ...}`; errors use
+`{ok: false, error: {code, message, retryable}}` and MCP `isError=true`.
+Prices are exact decimal strings. IDs and idempotency keys use 1–64 ASCII
+letters/digits/underscore/hyphen; security references are bounded opaque tokens.
+Order/consent grants expire after 5 minutes; demo sessions after 1 hour.
+The trusted adapter hides wire reference fields from model-facing schemas/results
+and provides a local confirmation-registration API; it is not an LLM agent.
+Its `cancel_ticket` hook revokes pending server-side consent on draft edits or
+cancellation. Production authentication and the Streamlit consent UI are pending.
 
 ## 3. Termination conditions
 

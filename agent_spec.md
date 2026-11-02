@@ -1,6 +1,6 @@
 # Agent specification
 
-Phase 1 design only; no application functionality is implemented.
+Design contract: Phase 2 implements storage and MCP tools; the LLM agent remains planned.
 Source: supplied Chapter 12.10 excerpt, printed pp. 578–581. Detailed contracts
 and security design: [supporting design](docs/AGENT_DESIGN.md).
 

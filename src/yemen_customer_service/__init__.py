@@ -1,1 +1,1 @@
-"""Customer service capstone namespace; application implementation is pending."""
+"""Synthetic customer service storage and official MCP integration capstone."""
