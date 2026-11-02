@@ -1,7 +1,8 @@
 # Implementation plan
 
-Only Phase 1 is authorized. Each later phase requires approval before work begins.
-Listed checks are future acceptance criteria, not executed results. Use one agent,
+Phases 1 and 2 are authorized; Phase 3 and later require approval before work begins.
+Phase 2 evidence is recorded in [PHASE_2.md](PHASE_2.md) and the requirements matrix.
+Other listed checks are future acceptance criteria. Use one agent,
 one MCP server, one SQLite database, and one Streamlit application.
 
 ## Authoritative source and scope
@@ -17,7 +18,7 @@ Official schedule: Day 1 planning (3h); Day 2 loop (6h); Day 3 MCP + memory (5h)
 Day 4 safety + cost (5h); Day 5 deployment + submission (4h). These are the book's
 time allocations, not claims of actual effort or deadlines. Our proposed phases
 reorder MCP before the agent loop to meet the user's genuine-integration goal;
-no official deliverable is omitted by that ordering. Do not start Phase 2 yet.
+no official deliverable is omitted by that ordering. Stop after Phase 2 for review.
 
 Official requirements are mapped separately in the requirements matrix. The
 exact seven tools, official SDK/stdio choice, authentication/reference design,
