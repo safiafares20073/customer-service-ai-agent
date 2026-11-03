@@ -29,7 +29,7 @@ requirements. Evidence must identify its commit, environment and provenance.
 | [ ] Public GitHub repository | LMS item 1 p. 581 | Repository archive accessible during review; verify logged-out web visibility of final submission commit |
 | [ ] Live demo URL | LMS item 2 p. 581 | Public landing/login URL plus privately supplied assessor access; do not publish credentials |
 | [x] traces/success_1.jsonl | LMS item 3 p. 581 | Imported unchanged live-labeled success trace; report/SQLite/audits/usage cross-checked offline; billing unverified; see SUCCESS_EVIDENCE_VALIDATION.md |
-| [ ] traces/near_failure_recovery.jsonl | LMS item 3 p. 581 | Real-MCP fixture rehearsal passed; separately gated live runner prepared, not executed; see LIVE_TRACE_RUNNER.md |
+| [x] traces/near_failure_recovery.jsonl | LMS item 3 p. 581 | Reviewed live-labeled recovery trace imported byte-identically; hash, same-task sequence, tokens/cost and supplied report checked; private DB checks attributed to prior reviewer; billing unverified; see RECOVERY_EVIDENCE_VALIDATION.md |
 | [ ] traces/explicit_failure.jsonl | LMS item 3 p. 581 | One-turn fixture failure verified; separately gated live runner prepared, not executed; see LIVE_TRACE_RUNNER.md |
 | [ ] agent_spec.md submitted | LMS item 4 p. 581 | Final six-element one-page file linked in submission |
 | [ ] cost_analysis.md | LMS item 5 p. 581 | Measured average/task, sample size, dated rates and explicit monthly workload projection |
@@ -56,7 +56,7 @@ are explicit project quality requirements; do not attribute them to unseen text.
 - [ ] Persistent SQLite storage with tested restart and private backup/restore procedure.
 - [ ] Actual final test/static/build outcomes recorded; no reduced security suite.
 - [x] Codespaces success evidence inspected against supplied report, SQLite and historical pricing; no independent provider receipt or invoice verification.
-- [x] Success originals and attempt.lock retained privately; export matches original SHA256 with no redactions. Recovery/failure evidence remains pending.
+- [x] Received success originals/attempt.lock and reviewed recovery ZIP retained privately; exports match their stated original hashes without redactions. Recovery raw databases remain outside this workspace; explicit failure remains pending.
 - [ ] English/Arabic, RTL, narrow screens and browser behavior reviewed honestly.
 - [ ] Submission contains no real customer data; invitee login identifiers stay private.
 - [ ] Limitations distinguish fixture, live, hosted, visual and billing verification.
