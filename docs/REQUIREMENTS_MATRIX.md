@@ -1,5 +1,19 @@
 # Requirements matrix
 
+## Recorded cost analysis complete — 2026-11-04
+
+[cost_analysis.md](../cost_analysis.md) independently recomputes all six usage
+records from the unchanged three official traces and documents n=3 attempted
+tasks, including terminal failure. Totals: 5,500 input, 152 output, 0 cached
+tokens, USD 0.0006260 estimated. Mean: approximately USD 0.000208666667/task.
+Monthly model-token projections at 100/1,000/10,000 tasks are USD 0.02086667 /
+0.20866667 / 2.08666667 using unrounded mean and historical Standard rates.
+The document and README distinguish recorded usage-derived estimates from
+independently unverified provider billing, with small-sample, scenario-mix and
+infrastructure exclusions. No paid calls or trace/source edits were made.
+This completes the cost-document preparation gate; hosting, authenticated demo
+access, visual review and final submission remain pending.
+
 ## All three reviewed submission trace artifacts present — 2026-11-04
 
 [traces/explicit_failure.jsonl](../traces/explicit_failure.jsonl) is imported
@@ -21,9 +35,9 @@ is 5,500 input / 152 output / 0 cached tokens and computed USD 0.0006260 across
 six model requests; these are usage-derived calculations, not billed costs.
 Success had private bundle checks in this workspace; recovery and failure private
 checks are attributed to their supplied independent reports. Overall capstone
-submission is not complete: cost_analysis.md, secure hosting/authentication, live
-demo URL, visual review and final documentation remain pending. No paid API call
-was made here; earlier trace-pending statements below are historical.
+submission is not complete: secure hosting/authentication, live demo URL, visual
+review and final documentation remain pending; cost analysis is now documented above.
+No paid API call was made here; earlier trace-pending statements below are historical.
 
 ## Reviewed live recovery evidence — 2026-11-03
 
@@ -138,14 +152,14 @@ independent provider authentication/billing and public deployment remain pending
 | Three hostile prompt-injection inputs; must not be deceived | Day 4, p. 580 | Three explicit cases in plan Phase 4 with outcome/side-effect checks | Phase 4: product, forged-consent and persistent-memory cases executed with scripted provider attacks + real MCP; all boundary assertions passed; live robustness unverified |
 | Simple Streamlit UI | Day 5, p. 580 | `ui/`; plan Phase 4 | Implemented and tested locally with Streamlit 1.66.1 AppTest and actual loopback server; Arabic/English and approval flows verified |
 | Deploy to Render or Railway | Day 5, p. 580 | Plan Phase 5 | Planned; no host selected or deployment |
-| Write README and document average cost | Day 5, p. 580 | README; measured average added in Phase 5 | README reflects Phase 4; actual billed average cost remains unmeasured |
+| Write README and document average cost | Day 5, p. 580 | README; measured average added in Phase 5 | README documents n=3 usage-derived mean USD 0.000208666667/task; sample/model/rates and monthly estimates linked; provider billing unverified |
 | Public GitHub repository | LMS item 1, p. 581 | Current project repository | Repository exists locally; public visibility unverified |
 | Live demo URL | LMS item 2, p. 581 | Verified deployed service | Missing until Phase 5 |
 | `traces/success_1.jsonl` | LMS item 3, p. 581 | Unchanged supplied success trace; docs/SUCCESS_EVIDENCE_VALIDATION.md | Complete locally: report/SQLite/MCP audits/tokens/cost checked; provider receipt and billing unverified |
 | `traces/near_failure_recovery.jsonl` | LMS item 3, p. 581 | Unchanged reviewed trace; docs/RECOVERY_EVIDENCE_VALIDATION.md | Complete locally: SHA256, event order, one-task retry, tokens/cost and report consistency verified; private DB checks attributed to prior reviewer; billing unverified |
 | `traces/explicit_failure.jsonl` | LMS item 3, p. 581 | Unchanged reviewed trace; docs/EXPLICIT_FAILURE_EVIDENCE_VALIDATION.md | Complete locally: expected terminal turn_limit, original SHA256, five events, one read/request, usage/cost and report verified; private DB checks attributed to original reviewer; billing unverified |
 | Submit `agent_spec.md` | LMS item 4, p. 581 | Root specification | Present; final submission not performed |
-| `cost_analysis.md`: avg cost/task and monthly projection | LMS item 5, p. 581 | Measured sample and documented projection assumptions; plan Phase 5 | Missing document; three supplied task usage-cost calculations reviewed; average/projection and billing reconciliation pending |
+| `cost_analysis.md`: avg cost/task and monthly projection | LMS item 5, p. 581 | Measured sample and documented projection assumptions; plan Phase 5 | Complete: total USD 0.0006260, n=3 average including failure, 100/1,000/10,000-task projections, dated rates/formula/limits; provider billing unverified |
 
 The book's Day 1–5 time allocations are recorded in the implementation plan.
 They are planning guidance, not measured execution evidence. The supplied excerpt

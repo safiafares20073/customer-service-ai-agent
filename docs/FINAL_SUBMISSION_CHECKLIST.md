@@ -25,14 +25,14 @@ requirements. Evidence must identify its commit, environment and provenance.
 | [ ] Three hostile prompt-injection inputs | Day 4 p. 580 | Three executed fixture attacks with real MCP passed; preserve actual outcomes and clearly state live robustness limits |
 | [ ] Simple Streamlit UI | Day 5 p. 580 | Local bilingual UI exists; final candidate must pass UI regression and hosted workflow review |
 | [ ] Deploy to Render or Railway | Day 5 p. 580 | Actual TLS URL, deployed commit, access checks, restart persistence and dated observations required |
-| [ ] README and average cost | Day 5 p. 580 | Update actual setup/demo/limitations and measured average with sample size |
+| [x] README and average cost | Day 5 p. 580 | README reflects reviewed traces and n=3 recorded-usage estimated mean USD 0.000208666667/task; cost_analysis.md states rates, scope and billing limits; final hosted instructions remain pending |
 | [ ] Public GitHub repository | LMS item 1 p. 581 | Repository archive accessible during review; verify logged-out web visibility of final submission commit |
 | [ ] Live demo URL | LMS item 2 p. 581 | Public landing/login URL plus privately supplied assessor access; do not publish credentials |
 | [x] traces/success_1.jsonl | LMS item 3 p. 581 | Imported unchanged live-labeled success trace; report/SQLite/audits/usage cross-checked offline; billing unverified; see SUCCESS_EVIDENCE_VALIDATION.md |
 | [x] traces/near_failure_recovery.jsonl | LMS item 3 p. 581 | Reviewed live-labeled recovery trace imported byte-identically; hash, same-task sequence, tokens/cost and supplied report checked; private DB checks attributed to prior reviewer; billing unverified; see RECOVERY_EVIDENCE_VALIDATION.md |
 | [x] traces/explicit_failure.jsonl | LMS item 3 p. 581 | Reviewed live-labeled terminal turn_limit trace imported byte-identically; one read/request, usage/cost and report verified; private DB checks attributed to original reviewer; billing unverified; see EXPLICIT_FAILURE_EVIDENCE_VALIDATION.md |
 | [ ] agent_spec.md submitted | LMS item 4 p. 581 | Final six-element one-page file linked in submission |
-| [ ] cost_analysis.md | LMS item 5 p. 581 | Measured average/task, sample size, dated rates and explicit monthly workload projection |
+| [x] cost_analysis.md | LMS item 5 p. 581 | Independent usage/cost arithmetic; n=3 includes terminal failure; total/average, historical rates, formula and 100/1,000/10,000-task monthly projections; billing unverified |
 
 The excerpt's last cost bullet is incomplete (“monthly project”). Monthly
 projection is an interpretation, not a quote of missing text. Day 1–5 durations
@@ -84,3 +84,12 @@ harness-controlled read retry), and explicit_failure (terminal turn_limit).
 This completes the trace-file preparation gate, not final LMS submission or
 independent provider/billing verification. Private database/plan checks remain
 attributed to the scope of each validation report. No new model execution occurred.
+
+
+## Cost-document readiness — November 4, 2026
+
+cost_analysis.md and the README now report six requests, 5,500 input / 152 output /
+0 cached tokens, USD 0.0006260 total and the n=3 observed mean including failure.
+The monthly projections assume unchanged historical rates and the observed
+three-scenario mix; small-sample and infrastructure/billing limits are explicit.
+This prepares the cost artifact; final submission and hosted-demo gates remain open.
