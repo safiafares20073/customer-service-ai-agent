@@ -8,7 +8,7 @@ version = "0.0.0"
 description = "Synthetic customer service storage and MCP server"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = ["mcp>=1.30,<2", "pydantic>=2.12,<3", "jsonschema>=4.26,<5"]
+dependencies = ["mcp>=1.30,<2", "pydantic>=2.12,<3", "jsonschema>=4.26,<5", "openai>=2,<3"]
 
 [dependency-groups]
 dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.14,<1"]
@@ -16,6 +16,7 @@ dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.14,<1"]
 [project.scripts]
 customer-service-mcp = "yemen_customer_service.tool_server.server:main"
 customer-service-demo = "yemen_customer_service.tool_server.demo:main"
+customer-service-agent = "yemen_customer_service.agent.cli:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
