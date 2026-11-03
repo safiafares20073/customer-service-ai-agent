@@ -1,6 +1,6 @@
 # Final submission acceptance checklist
 
-Status as of 2026-11-03 (Asia/Aden). Unchecked means final acceptance is pending;
+Status as of 2026-11-04 (Asia/Aden). Unchecked means final acceptance is pending;
 it does not imply the existing implementation is missing. Historical fixture
 results are in the requirements matrix. This checklist introduces no new official
 requirements. Evidence must identify its commit, environment and provenance.
@@ -30,7 +30,7 @@ requirements. Evidence must identify its commit, environment and provenance.
 | [ ] Live demo URL | LMS item 2 p. 581 | Public landing/login URL plus privately supplied assessor access; do not publish credentials |
 | [x] traces/success_1.jsonl | LMS item 3 p. 581 | Imported unchanged live-labeled success trace; report/SQLite/audits/usage cross-checked offline; billing unverified; see SUCCESS_EVIDENCE_VALIDATION.md |
 | [x] traces/near_failure_recovery.jsonl | LMS item 3 p. 581 | Reviewed live-labeled recovery trace imported byte-identically; hash, same-task sequence, tokens/cost and supplied report checked; private DB checks attributed to prior reviewer; billing unverified; see RECOVERY_EVIDENCE_VALIDATION.md |
-| [ ] traces/explicit_failure.jsonl | LMS item 3 p. 581 | One-turn fixture failure verified; separately gated live runner prepared, not executed; see LIVE_TRACE_RUNNER.md |
+| [x] traces/explicit_failure.jsonl | LMS item 3 p. 581 | Reviewed live-labeled terminal turn_limit trace imported byte-identically; one read/request, usage/cost and report verified; private DB checks attributed to original reviewer; billing unverified; see EXPLICIT_FAILURE_EVIDENCE_VALIDATION.md |
 | [ ] agent_spec.md submitted | LMS item 4 p. 581 | Final six-element one-page file linked in submission |
 | [ ] cost_analysis.md | LMS item 5 p. 581 | Measured average/task, sample size, dated rates and explicit monthly workload projection |
 
@@ -56,7 +56,7 @@ are explicit project quality requirements; do not attribute them to unseen text.
 - [ ] Persistent SQLite storage with tested restart and private backup/restore procedure.
 - [ ] Actual final test/static/build outcomes recorded; no reduced security suite.
 - [x] Codespaces success evidence inspected against supplied report, SQLite and historical pricing; no independent provider receipt or invoice verification.
-- [x] Received success originals/attempt.lock and reviewed recovery ZIP retained privately; exports match their stated original hashes without redactions. Recovery raw databases remain outside this workspace; explicit failure remains pending.
+- [x] Received success originals/attempt.lock and reviewed recovery/failure ZIPs retained privately; all three exports match their stated original hashes without redactions. Recovery/failure raw databases remain outside this workspace; private checks are attributed to their reviewers.
 - [ ] English/Arabic, RTL, narrow screens and browser behavior reviewed honestly.
 - [ ] Submission contains no real customer data; invitee login identifiers stay private.
 - [ ] Limitations distinguish fixture, live, hosted, visual and billing verification.
@@ -74,3 +74,13 @@ are explicit project quality requirements; do not attribute them to unseen text.
 These are not necessary for the narrowly scoped capstone. Deferring them does
 not justify omitting authentication, authorization, secret handling, tested
 persistence or spending controls for the hosted demo.
+
+
+## Trace artifact readiness — November 4, 2026
+
+All three official trace files are present and reviewed with unchanged original
+bytes: success_1 (completed), near_failure_recovery (completed after the disclosed
+harness-controlled read retry), and explicit_failure (terminal turn_limit).
+This completes the trace-file preparation gate, not final LMS submission or
+independent provider/billing verification. Private database/plan checks remain
+attributed to the scope of each validation report. No new model execution occurred.
