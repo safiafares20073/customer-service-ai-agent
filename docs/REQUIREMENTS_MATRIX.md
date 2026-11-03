@@ -147,11 +147,11 @@ independent provider authentication/billing and public deployment remain pending
 | Save JSONL traces | Day 2, p. 579 | Actual loop runs; plan Phase 3 and submission checklist | Fixture traces retain their labels; all three unchanged live-labeled submission traces reviewed; billing unverified |
 | Bind at least one MCP server (own server allowed) | Day 3, p. 580 | `tool_server/`; plan Phase 2 | Verified: official FastMCP 1.30.0 stdio subprocess; initialize, discover and call tests pass |
 | SQLite memory; remembers after restart | Day 3, p. 580 | `storage/`, agent restart test; plan Phase 3 | Separate agent OS processes remember a scoped conversation fact; cross-customer isolation verified with provider fixtures |
-| Permission layer and audit log | Day 4, p. 580 | Server and storage; plan Phases 2–3 | Agent, MCP and trusted UI boundaries tested; production authentication pending |
+| Permission layer and audit log | Day 4, p. 580 | Server and storage; plan Phases 2–3 | Agent, MCP and trusted UI boundaries tested; native OIDC invitation authorization implemented/tested offline; real IdP acceptance pending |
 | Cost tracker | Day 4, p. 580 | Agent and SQLite task/call costs; plan Phase 3 | Implemented: Decimal accounting and reservations; success raw usage reconciled to USD 0.0003199; recovery trace/report cost verified at USD 0.0002126; invoices unverified |
 | Three hostile prompt-injection inputs; must not be deceived | Day 4, p. 580 | Three explicit cases in plan Phase 4 with outcome/side-effect checks | Phase 4: product, forged-consent and persistent-memory cases executed with scripted provider attacks + real MCP; all boundary assertions passed; live robustness unverified |
 | Simple Streamlit UI | Day 5, p. 580 | `ui/`; plan Phase 4 | Implemented and tested locally with Streamlit 1.66.1 AppTest and actual loopback server; Arabic/English and approval flows verified |
-| Deploy to Render or Railway | Day 5, p. 580 | Plan Phase 5 | Planned; no host selected or deployment |
+| Deploy to Render or Railway | Day 5, p. 580 | Plan Phase 5 | Render configuration and private mounted-disk container prepared/tested locally; no deployment |
 | Write README and document average cost | Day 5, p. 580 | README; measured average added in Phase 5 | README documents n=3 usage-derived mean USD 0.000208666667/task; sample/model/rates and monthly estimates linked; provider billing unverified |
 | Public GitHub repository | LMS item 1, p. 581 | Current project repository | Repository exists locally; public visibility unverified |
 | Live demo URL | LMS item 2, p. 581 | Verified deployed service | Missing until Phase 5 |
@@ -205,9 +205,9 @@ about extra official rubric requirements.
 | Limits across ticket confirmation/resumption | `agent/`, trusted task state | Same task retains usage/turns/active-time limits; deterministic limit response makes no LLM call | Same task ID, session, counters, elapsed time, cost and original limits persist; tested across real process exit/resumption |
 | Prompt-injection defenses | `tests/security/` and permission boundary | Malicious catalog, policies, memory, messages, and results cannot authorize side effects or leak data | Three hostile scenarios + exhausted-limit subcase passed with scripted provider fixtures and actual MCP; not a claim of universal live LLM robustness |
 | Streamlit UI | `ui/` | Executed chat, confirmation, cost-display, and session-isolation smoke checks | Verified: bilingual/RTL chat, exact editable draft, confirm/cancel, duplicate/replay/session guards, safe errors; API accounting/debug details excluded from customer views |
-| Public deployment | Render or Railway configuration to be selected | Actual public endpoint, authenticated functional checks, persistent-volume restart | 5: planned |
+| Public deployment | Render or Railway configuration to be selected | Actual public endpoint, authenticated functional checks, persistent-volume restart | 5: Render container/disk/OIDC implementation prepared; real deployment and URL pending |
 | Honest tests, traces, and coverage | Future test suite; ignored `artifacts/` | Actual runner outputs with commit/versions; no zero-test readiness claim | 187 passed, 0 failed, 0 skipped on explicit-failure import; fixture regressions remain labeled; all three reviewed live-labeled submission traces present; no coverage claim |
-| No secrets committed | Ignore rules and secure configuration practices | Review staged changes before any future commit; inspect safe configuration | No secrets added; Phase 4 changes uncommitted; generated databases, costs, logs and test evidence remain ignored |
+| No secrets committed | Ignore rules and secure configuration practices | Review staged changes before any future commit; inspect safe configuration | No real secrets added; generated databases, costs, logs and test evidence remain ignored; hosted secrets are private runtime-only |
 
 ## Historical Phase 2 verification
 
@@ -339,3 +339,27 @@ Python 3.12.14; Streamlit 1.66.1; MCP 1.30.0; OpenAI SDK 2.54.0; uv 0.12.23.
   pixels, accessibility, live model behavior, production login and deployment
   remain unverified or Phase 5 work. No paid calls, commits, pushes, PR merges,
   environment publication, or Phase 5 implementation occurred for this phase.
+
+
+## Secure-hosting preparation — November 4, 2026
+
+The official public-deployment/URL gates remain incomplete. The following are
+project safeguards verified offline, not new official rubric requirements or
+claims of live identity-provider/provider-billing validation.
+
+| Safeguard | Implementation | Verification / remaining acceptance |
+| --- | --- | --- |
+| Invitation-only authentication | Native Streamlit/Authlib OIDC, exact issuer/subject allowlist, opaque HMAC principal | Offline real code/signature/state/nonce/PKCE tests; actual provider configuration/login pending |
+| Protected sessions | 15-minute maximum application age, audience/azp checks, durable revocation, scoped capabilities | Expiry/logout/replay, invitation removal, cross-login/principal and real MCP denial tests |
+| Safe fresh production database | Base schema 2 plus hosted extension 1; public catalog only | Development/fixture promotion rejected, no seeded accounts/orders; mounted-volume startup tested |
+| Consent and agent preservation | Shared existing renderer/controller, seven unchanged MCP contracts, transaction-side hosted write gate | Exact edit/confirm/cancel, idempotence and cumulative limits; previous tests retained |
+| Shared spending and kill | Durable pre-request reservations, lifetime global/principal totals, sticky unknown block, single-operation OS lock | Restart, concurrent process, crash reservation, usage overflow and disabled-provider tests; no paid calls |
+| Secure proxy/runtime | Private worker, HTTPS origin, Caddy Secure cookie/header hardening, private secrets, health route | Real local Caddy and container checks; public TLS/WebSocket acceptance pending |
+| Retention and persistence | Seven-day startup/manual content purge, retained accounting/revocation, private disk | Real process and container restart tests; operational backup/restore and scheduled purge remain operator responsibilities |
+| Bilingual UI | Shared English/Arabic widgets and RTL CSS, protected login and logout | AppTest text/workflow checks; browser/mobile pixel and accessibility review pending |
+
+See [SECURE_HOSTING.md](SECURE_HOSTING.md) for final executed counts, retained
+initial failures, upstream warning and limitations. Original success/recovery/
+failure traces and cost_analysis.md are unchanged; no new fixture output is
+presented as live evidence. Hosted implementation preparation is distinct from
+actually deploying and supplying assessor access.

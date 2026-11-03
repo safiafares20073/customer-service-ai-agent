@@ -189,14 +189,41 @@ def build_server(store: Store, session_token: str | None = None) -> CustomerServ
 
 def main() -> None:
     token = os.environ.pop("CS_SESSION_TOKEN", None)
-    if token and (
-        os.getenv("ENABLE_DEMO_AUTH") != "true"
-        or os.getenv("APP_ENV", "development") != "development"
+    hosted = os.getenv("APP_ENV") == "production"
+    if hosted and os.getenv("ENABLE_DEMO_AUTH") == "true":
+        raise SystemExit("Synthetic authenticated sessions require development demo opt-in.")
+    if hosted and (
+        os.getenv("HOSTED_MODE") != "true" or os.getenv("ENABLE_DEMO_AUTH") != "false" or not token
+    ):
+        raise SystemExit("Hosted MCP requires a bound production session.")
+    if (
+        not hosted
+        and token
+        and (
+            os.getenv("ENABLE_DEMO_AUTH") != "true"
+            or os.getenv("APP_ENV", "development") != "development"
+        )
     ):
         raise SystemExit("Synthetic authenticated sessions require development demo opt-in.")
     database = Database(os.getenv("DATABASE_PATH", "data/customer_service.sqlite3"))
     database.initialize()  # Seeding is an explicit trusted setup operation.
-    build_server(Store(database), token).run(transport="stdio")
+    with database.connect() as conn:
+        marker = conn.execute(
+            "SELECT value FROM metadata WHERE key='hosted_schema_version'"
+        ).fetchone()
+    if hosted:
+        from yemen_customer_service.hosting.store import HOSTED_SCHEMA, HostedStore
+
+        if marker is None or marker[0] != str(HOSTED_SCHEMA):
+            raise SystemExit("Hosted database is not initialized.")
+        store = HostedStore(database)
+        with database.connect() as conn:
+            store.session(conn, token)
+    else:
+        if marker:
+            raise SystemExit("Hosted data cannot use development authentication.")
+        store = Store(database)
+    build_server(store, token).run(transport="stdio")
 
 
 if __name__ == "__main__":

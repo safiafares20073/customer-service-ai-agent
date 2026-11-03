@@ -134,15 +134,29 @@ async def connect(
     token: str | None = None,
     *,
     enable_demo_auth: bool = False,
+    enable_hosted_auth: bool = False,
 ) -> AsyncIterator[TrustedClient]:
     """Launch one real stdio MCP server bound to one trusted synthetic session."""
     app_env = os.getenv("APP_ENV", "development")
-    if token and (not enable_demo_auth or app_env != "development"):
+    if app_env == "production":
+        from yemen_customer_service.hosting.store import HostedStore
+
+        if (
+            not enable_hosted_auth
+            or enable_demo_auth
+            or not isinstance(store, HostedStore)
+            or not token
+        ):
+            raise SafeError("ACCESS_DENIED")
+        with store.db.connect() as conn:
+            store.session(conn, token)  # Bound to a live, invited, unrevoked login.
+    elif token and (not enable_demo_auth or app_env != "development" or enable_hosted_auth):
         raise SafeError("ACCESS_DENIED")
     env = {
         "DATABASE_PATH": str(Path(database_path).resolve()),
         "APP_ENV": app_env,
         "ENABLE_DEMO_AUTH": "true" if enable_demo_auth else "false",
+        "HOSTED_MODE": "true" if enable_hosted_auth else "false",
     }
     if token:
         env["CS_SESSION_TOKEN"] = token

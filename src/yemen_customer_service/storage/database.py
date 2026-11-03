@@ -75,6 +75,7 @@ class Database:
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA foreign_keys = ON")
         conn.execute("PRAGMA busy_timeout = 5000")
+        conn.execute("PRAGMA synchronous = FULL")
         try:
             if write:
                 conn.execute("BEGIN IMMEDIATE")
@@ -111,6 +112,15 @@ class Database:
             "INSERT OR IGNORE INTO customers VALUES (?, ?)",
             [("demo-a", "Synthetic Customer A"), ("demo-b", "Synthetic Customer B")],
         )
+        Database.seed_catalog(conn)
+        conn.executemany(
+            "INSERT OR IGNORE INTO orders VALUES (?, ?, ?, ?)",
+            [("DEMO-100", "demo-a", "shipped", None), ("DEMO-200", "demo-b", "processing", None)],
+        )
+
+    @staticmethod
+    def seed_catalog(conn: sqlite3.Connection) -> None:
+        """Public synthetic catalog only; no identities, orders, sessions or memory."""
         conn.executemany(
             "INSERT OR IGNORE INTO products VALUES (?, ?, ?, ?, ?, ?)",
             [
@@ -138,8 +148,4 @@ class Database:
                     "demo-v1",
                 ),
             ],
-        )
-        conn.executemany(
-            "INSERT OR IGNORE INTO orders VALUES (?, ?, ?, ?)",
-            [("DEMO-100", "demo-a", "shipped", None), ("DEMO-200", "demo-b", "processing", None)],
         )

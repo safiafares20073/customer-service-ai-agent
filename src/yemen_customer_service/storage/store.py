@@ -50,7 +50,10 @@ class Store:
             customer = conn.execute(
                 "SELECT 1 FROM customers WHERE customer_id=?", (customer_id,)
             ).fetchone()
-            if marker is None or marker[0] != "synthetic-only" or customer is None:
+            hosted = conn.execute(
+                "SELECT 1 FROM metadata WHERE key='hosted_schema_version'"
+            ).fetchone()
+            if hosted or marker is None or marker[0] != "synthetic-only" or customer is None:
                 raise SafeError("ACCESS_DENIED")
             conn.execute(
                 "INSERT INTO tasks(task_id, customer_id, created_at) VALUES (?, ?, ?)",
@@ -71,6 +74,9 @@ class Store:
             raise SafeError("ACCESS_DENIED")
         return row
 
+    def _check_write(self, conn: sqlite3.Connection, identity: sqlite3.Row) -> None:
+        """Extension hook within the write transaction; hosted mode adds its kill gate."""
+
     def register_confirmation(
         self, session_token: str, draft: TicketDraft, *, confirmed: bool
     ) -> str:
@@ -86,6 +92,7 @@ class Store:
         token = secrets.token_urlsafe(32)
         with self.db.connect(write=True) as conn:
             identity = self.session(conn, session_token)
+            self._check_write(conn, identity)
             if draft.order_id:
                 self._owner(conn, identity, draft.order_id)
             conn.execute(
@@ -237,6 +244,7 @@ class Store:
         hashed_payload = payload_hash(draft)
         with self.db.connect(write=True) as conn:
             identity = self.session(conn, session_token)
+            self._check_write(conn, identity)
             if order_id is not None and access_reference is not None:
                 self._access(conn, identity, order_id, access_reference)
             existing = conn.execute(

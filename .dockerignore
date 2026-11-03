@@ -1,0 +1,13 @@
+**
+!Dockerfile
+!pyproject.toml
+!uv.lock
+!README.md
+!src/
+!src/**
+!config/
+!config/model_pricing.json
+!deployment/
+!deployment/Caddyfile
+**/__pycache__/
+**/*.pyc

@@ -1,6 +1,9 @@
 # Minimum safe hosted-demo design
 
-Proposal only, 2026-11-03 (Asia/Aden). No authentication or hosting implemented.
+Original proposal dated 2026-11-03 (Asia/Aden). Implementation prepared November 4;
+actual deployment remains unperformed. The design below retains planning context;
+see [SECURE_HOSTING.md](SECURE_HOSTING.md) and [DEPLOYMENT.md](DEPLOYMENT.md) for
+implemented behavior, executed checks and remaining real-host acceptance.
 Preserve one agent, seven existing MCP tools, SQLite, trusted consent and limits.
 
 ## Decision and alternatives
@@ -64,7 +67,7 @@ or billable plan has been selected.
 
 Use a separate production launcher and APP_ENV=production. ENABLE_DEMO_AUTH must
 be false; missing/contradictory security configuration fails closed. Use the
-platform port and only expose the Streamlit listener. Preserve XSRF/CORS, safe
+platform port for Caddy; keep the Streamlit listener on loopback. Preserve XSRF/CORS, safe
 errors, secret-free logs and private capability transport. Do not modify the
 development launcher into a public demo-auth launcher.
 

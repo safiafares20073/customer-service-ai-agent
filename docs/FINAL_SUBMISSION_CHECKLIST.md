@@ -23,7 +23,7 @@ requirements. Evidence must identify its commit, environment and provenance.
 | [ ] SQLite memory remembers after restart | Day 3 p. 580 | Existing cross-process scoped fixture tests; rerun for final candidate |
 | [ ] Permission layer, audit log, cost tracker | Day 4 p. 580 | Existing tested implementation; verify hosted access/spending gates and records |
 | [ ] Three hostile prompt-injection inputs | Day 4 p. 580 | Three executed fixture attacks with real MCP passed; preserve actual outcomes and clearly state live robustness limits |
-| [ ] Simple Streamlit UI | Day 5 p. 580 | Local bilingual UI exists; final candidate must pass UI regression and hosted workflow review |
+| [ ] Simple Streamlit UI | Day 5 p. 580 | Local bilingual UI exists; offline production UI regression is recorded in SECURE_HOSTING.md; real hosted workflow review remains pending |
 | [ ] Deploy to Render or Railway | Day 5 p. 580 | Actual TLS URL, deployed commit, access checks, restart persistence and dated observations required |
 | [x] README and average cost | Day 5 p. 580 | README reflects reviewed traces and n=3 recorded-usage estimated mean USD 0.000208666667/task; cost_analysis.md states rates, scope and billing limits; final hosted instructions remain pending |
 | [ ] Public GitHub repository | LMS item 1 p. 581 | Repository archive accessible during review; verify logged-out web visibility of final submission commit |
@@ -93,3 +93,29 @@ cost_analysis.md and the README now report six requests, 5,500 input / 152 outpu
 The monthly projections assume unchanged historical rates and the observed
 three-scenario mix; small-sample and infrastructure/billing limits are explicit.
 This prepares the cost artifact; final submission and hosted-demo gates remain open.
+
+
+## Hosted-demo preparation — November 4, 2026
+
+Prepared Render container, private mounted SQLite, native OIDC invitation gate,
+logout/expiry, durable shared spending limits, concurrency and kill controls.
+See [SECURE_HOSTING.md](SECURE_HOSTING.md) for offline test evidence and
+[DEPLOYMENT.md](DEPLOYMENT.md) for exact release steps. This does not check off the
+mandatory public URL or deployment item above. All three trace artifacts and
+cost_analysis.md remain unchanged.
+
+- [x] Offline OIDC cryptography/code-flow, invitation, expiry/logout/replay and
+  principal-isolation tests with clearly labeled issuer/provider fixtures.
+- [x] No-demo/no-order production initialization and real private MCP checks.
+- [x] Paid-disabled defaults, durable lifetime allowances/reservations and sticky
+  unknown-usage block; real cross-process tests and retained accounting.
+- [x] Container/proxy preparation and automated bilingual/RTL UI checks.
+- [ ] Independently review and merge the hosting PR.
+- [ ] Approve infrastructure cost quote, configure private OIDC secrets/invitations
+  and persistent disk, then separately approve actual deployment.
+- [ ] Validate real HTTPS login/logout/expiry, rejected and isolated users,
+  WebSockets, private disk restart and safe unavailable-chat state without paid calls.
+- [ ] Record desktop/mobile Arabic/English visual and keyboard review.
+- [ ] Separately authorize bounded OpenAI spending before any live hosted chat;
+  fresh pricing, restricted key, expiry, positive budgets and private enable required.
+- [ ] Privately arrange assessor access and publish the verified login URL only.
