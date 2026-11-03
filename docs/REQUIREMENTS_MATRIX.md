@@ -363,3 +363,20 @@ initial failures, upstream warning and limitations. Original success/recovery/
 failure traces and cost_analysis.md are unchanged; no new fixture output is
 presented as live evidence. Hosted implementation preparation is distinct from
 actually deploying and supplying assessor access.
+
+
+## Railway Free adaptation — November 4, 2026
+
+| Item | Actual status / evidence |
+| --- | --- |
+| Free compatibility and sources | CONDITIONAL: official railwayapp/docs source at dcbeb29573190a245d9af7cc43fbbdde0dee7375 lists 0.5 GB RAM, 1 vCPU, one 0.5 GB volume, 4 GB image and USD 1/month credit; rendered site blocked; account eligibility/egress/credit not verified |
+| Supported Railway configuration | .railway/railway.ts with separately pinned SDK and lockfile; four offline SDK assertions pass; no plan/apply/provisioning or platform-side schema acceptance claimed |
+| Resource fit / startup / health | Actual local production image with conservative 500 MB RAM/no swap and 1 vCPU: peak 236,281,856 bytes; five fixture SDK calls, real MCP, bilingual AppTest, confirmation and private disk restart pass; no OOM; actual Railway/browser/live capacity pending |
+| Live OpenAI readiness | Existing official SDK/model/Standard/none configuration and real MCP unchanged; activation by private settings plus operator approval remains available; current external model/pricing/account verification and hosted live task pending |
+| Security/spending preservation | No production source or existing tests changed; server-validated OIDC, scoped memory/consent/capabilities, durable limits/unknown-usage block, concurrency and kill retained |
+| Regression/static evidence | 258 passed, 0 failed/skipped (one Authlib warning); 4 IaC checks, Ruff, Python dependencies/lock/package build and container checks pass; SDK audit reports zero known vulnerabilities; details in RAILWAY_DEPLOYMENT.md |
+| Official final artifacts | Three traces and cost_analysis.md unchanged; no new fixture output presented as live evidence; real public URL and actual hosted acceptance still pending |
+
+Railway preference supersedes the historical Render selection above. No Free
+uptime, zero total cost, provider billing verification, current account access,
+real authentication exchange or deployment is inferred from local fixture tests.

@@ -193,3 +193,21 @@ Actual deployment, real IdP/cookie/browser acceptance, public URL, manual narrow
 screen review and separately approved live chat are remaining release gates.
 Neither a healthy local container nor mocked issuer tests complete those gates.
 No paid calls or account provisioning occurs during preparation.
+
+
+## Railway Free preparation — November 4, 2026
+
+Preferred platform is now Railway Free, conditionally: one native-configured
+Docker service, one persistent 0.5 GB volume and existing production boundaries.
+[RAILWAY_DEPLOYMENT.md](RAILWAY_DEPLOYMENT.md) records official source revision,
+limits/prices/credit caveats, 500 MB/1-vCPU local workload evidence, deployment
+steps and paid-chat approval gates. Configuration uses the documented current
+IaC SDK (deployment-only locked dependency), not legacy railway.json/toml.
+
+258 Python tests and 4 offline IaC checks pass; capped local genuine-MCP fixture
+workload/restart checks pass. Production application code and prior tests are
+unchanged in this adaptation. No deployment, upgrade, credentials, real account
+or paid model call was used. Actual account entitlement/egress/credit duration,
+real OIDC/HTTPS/WebSocket/mobile checks and separately approved live hosted chat
+are remaining gates. Real OpenAI remains available after approved configuration;
+there is no fixture fallback in the hosted path.

@@ -38,3 +38,6 @@ coverage.xml
 .idea/
 .vscode/
 .DS_Store
+
+# Deployment-authoring SDK only; never part of the Python runtime image
+.railway/node_modules/

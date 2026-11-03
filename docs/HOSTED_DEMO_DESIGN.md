@@ -114,3 +114,14 @@ authenticated public URL with private assessor invitations is the proposed safe
 interpretation. Confirm assessor access expectations before final submission.
 If anonymous chat is later required, redesign public-read-only capabilities and
 abuse/spending protections; do not weaken this boundary by enabling demo auth.
+
+
+## Platform update — November 4, 2026
+
+The user now prefers Railway Free. The same secure architecture is preserved;
+see [RAILWAY_DEPLOYMENT.md](RAILWAY_DEPLOYMENT.md) for official-source limits,
+conditional eligibility/credit requirements, native configuration, capped local
+resource measurements and the live OpenAI activation path. No paid platform upgrade
+or resource provisioning is authorized. Historical Render selection above is
+superseded for this preparation; actual deployment and browser/provider acceptance
+remain pending. No authentication, MCP, consent or storage requirement is removed.
