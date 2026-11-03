@@ -1,5 +1,10 @@
 # Customer Service AI Agent
 
+Phase 5 update: the success trace has been reviewed and the remaining live-trace
+runner is now **prepared, not executed**. See [gates, no-cost preflight and later
+Codespaces commands](docs/LIVE_TRACE_RUNNER.md). No new paid calls or public
+deployment are claimed. Earlier phase-status sections below retain their context.
+
 LLM4Yemen Track B, Week 5 capstone.
 
 **Current status: Phase 4 local Streamlit UI and adversarial fixture validation.**

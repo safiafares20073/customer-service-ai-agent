@@ -1,5 +1,10 @@
 # Implementation plan
 
+The next authorized preparation is the separately gated runner described in
+[LIVE_TRACE_RUNNER.md](LIVE_TRACE_RUNNER.md). It reuses the reviewed recovery
+helpers, adds durable shared allowances and permanent per-scenario locks, and is
+validated offline only. Actual paid execution and hosting remain unauthorized.
+
 Current trace-preparation work is documented in [TRACE_SCENARIOS.md](TRACE_SCENARIOS.md):
 offline-only provider-fixture rehearsals with real MCP, a controlled test-server
 storage fault and harness-only public-read retry, plus an explicit one-turn task

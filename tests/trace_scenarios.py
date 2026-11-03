@@ -22,45 +22,12 @@ from yemen_customer_service.agent.loop import Agent
 from yemen_customer_service.agent.pricing import Pricing
 from yemen_customer_service.agent.state import Journal, Limits
 from yemen_customer_service.agent.tracing import Trace
+from yemen_customer_service.evidence.recovery import ReadRecoveryClient
 from yemen_customer_service.storage.database import Database
 from yemen_customer_service.storage.store import Store
 from yemen_customer_service.tool_server.client import TrustedClient, protocol_session
 
 SUCCESS_HASH = "5be36011fe156260ec967cdcd221f0a8c0f4e8786321f9ca257e4902bd9e19cb"
-
-
-class ReadRecoveryClient(TrustedClient):
-    """Harness-only policy: at most one retry of list_products for this task.
-
-    Agent._tool's existing timeout surrounds both calls. No write, authorization
-    error, nonretryable result or transport exception is retried. No LLM request
-    or task/session/counter reset occurs here. Production adapter is unchanged.
-    """
-
-    def __init__(self, session, store, token, journal, trace):
-        super().__init__(session, store, token)
-        self.journal, self.trace = journal, trace
-        self.retried = False
-
-    async def invoke(self, name, arguments):
-        response = await super().invoke(name, arguments)
-        if response.get("ok"):
-            return response
-        error = response.get("error", {})
-        self.trace.emit("tool", tool=name, status="error", reason=error["code"])
-        if (
-            name != "list_products"
-            or self.retried
-            or error.get("code") != "INTERNAL_ERROR"
-            or error.get("retryable") is not True
-        ):
-            return response
-        state = self.journal.load(self.trace.task_id)
-        if state.unknown_cost or state.held_usd >= state.limits.budget_usd:
-            return response
-        self.retried = True
-        self.trace.emit("tool", tool=name, status="retrying", reason="INTERNAL_ERROR")
-        return await super().invoke(name, arguments)
 
 
 async def run_scenario(root: Path, scenario: str, *, fault="once", tool_seconds=10):
