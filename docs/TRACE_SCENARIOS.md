@@ -1,5 +1,9 @@
 # Remaining trace scenarios: offline rehearsal and live-run plan
 
+This records the original fixture-rehearsal change. Subsequent separately gated
+live-runner preparation is documented in [LIVE_TRACE_RUNNER.md](LIVE_TRACE_RUNNER.md);
+it does not mean a live run or official export has occurred.
+
 Date: 2026-11-03 (Asia/Aden). Baseline: merged main
 `c051375cae765f22229d06aec6b288eb8e76ad82`. The previous local success-evidence
 commit had identical tracked contents; the clean checkout was detached at the

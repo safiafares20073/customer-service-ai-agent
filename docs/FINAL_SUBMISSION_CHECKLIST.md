@@ -29,8 +29,8 @@ requirements. Evidence must identify its commit, environment and provenance.
 | [ ] Public GitHub repository | LMS item 1 p. 581 | Repository archive accessible during review; verify logged-out web visibility of final submission commit |
 | [ ] Live demo URL | LMS item 2 p. 581 | Public landing/login URL plus privately supplied assessor access; do not publish credentials |
 | [x] traces/success_1.jsonl | LMS item 3 p. 581 | Imported unchanged live-labeled success trace; report/SQLite/audits/usage cross-checked offline; billing unverified; see SUCCESS_EVIDENCE_VALIDATION.md |
-| [ ] traces/near_failure_recovery.jsonl | LMS item 3 p. 581 | Fixture rehearsal passed with a genuine MCP storage fault and bounded harness-only read retry; qualifying live run pending; see TRACE_SCENARIOS.md |
-| [ ] traces/explicit_failure.jsonl | LMS item 3 p. 581 | Fixture rehearsal passed with one-turn terminal task failure and no extra request; qualifying live run pending; see TRACE_SCENARIOS.md |
+| [ ] traces/near_failure_recovery.jsonl | LMS item 3 p. 581 | Real-MCP fixture rehearsal passed; separately gated live runner prepared, not executed; see LIVE_TRACE_RUNNER.md |
+| [ ] traces/explicit_failure.jsonl | LMS item 3 p. 581 | One-turn fixture failure verified; separately gated live runner prepared, not executed; see LIVE_TRACE_RUNNER.md |
 | [ ] agent_spec.md submitted | LMS item 4 p. 581 | Final six-element one-page file linked in submission |
 | [ ] cost_analysis.md | LMS item 5 p. 581 | Measured average/task, sample size, dated rates and explicit monthly workload projection |
 

@@ -1,5 +1,14 @@
 # Requirements matrix
 
+## Gated live runner preparation — not live execution
+
+[LIVE_TRACE_RUNNER.md](LIVE_TRACE_RUNNER.md) documents the separately gated runner,
+shared reviewed recovery policy, durable two-task/nine-attempt/USD 0.10 estimated
+plan, one-attempt locks, and no-cost preflight. Offline tests use provider_fixture
+labels and actual MCP subprocesses. No paid requests, new live traces, hosting
+or independent billing verification occur. The two remaining official submission
+files stay pending until qualifying live executions and independent review.
+
 ## Remaining trace rehearsals — fixture evidence only
 
 See [controlled trace scenarios](TRACE_SCENARIOS.md). On merged-main baseline
