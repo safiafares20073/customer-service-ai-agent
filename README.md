@@ -2,13 +2,13 @@
 
 LLM4Yemen Track B, Week 5 capstone.
 
-**Current status: Phase 3 implementation; live OpenAI validation pending.**
+**Current status: Phase 4 local Streamlit UI and adversarial fixture validation.**
 One official OpenAI SDK agent discovers and calls the existing seven MCP tools
 through genuine stdio communication. It includes scoped SQLite memory, task
 resumption, cost reservations/accounting, time/turn limits, and redacted JSONL
 metadata tracing. Tests use explicitly labeled provider fixtures and real MCP.
-No live OpenAI execution, billed-cost measurement, Streamlit UI, public deployment,
-or submission trace is claimed.
+The Arabic/English customer UI is implemented and tested locally. No live OpenAI
+execution, billed-cost measurement, public deployment, or submission trace is claimed.
 
 The application is a single LLM agent designed to answer product and policy
 questions, checks authorized orders, and creates support tickets after consent.
@@ -26,7 +26,7 @@ src/yemen_customer_service/
   agent/          # OpenAI loop, durable state, pricing, traces, guarded console
   tool_server/    # Official SDK FastMCP server, trusted adapter, console demo
   storage/        # SQLite migrations, synthetic fixtures, authorized operations
-  ui/             # Future Streamlit interface
+  ui/             # Local-only bilingual Streamlit app and trusted controller
 tests/
   agent/          # SDK-provider fixtures + real MCP, limits, process restart
   unit/
@@ -122,11 +122,50 @@ No model substitution or alternate pricing tier is attempted on provider errors.
 See [Phase 3 implementation, verification, and limitations](docs/PHASE_3.md).
 Provider-fixture estimates and JSONL evidence are explicitly labeled; they do not
 prove live model behavior. Raw prompts/answers/arguments are excluded from traces.
-The original Phase 2 schema and all seven tool contracts are preserved. Phase 4,
-including its prompt-injection acceptance exercises, remains unauthorized.
+The original Phase 2 schema and all seven tool contracts are preserved.
 
 A [single-task live smoke test](docs/LIVE_SMOKE_TEST.md) is prepared but has not
 been executed. Its safe preflight is
 `.venv/bin/python -m yemen_customer_service.agent.smoke --preflight`.
 The paid runner requires separate explicit approval and has a persistent
 one-attempt interlock. Fixture rehearsals do not establish live success.
+
+## Phase 4 customer interface (local synthetic demo)
+
+From the repository root, with Python 3.12.14 and uv:
+
+```sh
+uv sync --frozen
+UI_PROVIDER=fixture .venv/bin/customer-service-ui --demo
+```
+
+The launcher binds only to loopback on port 8501. Use the browser on the same
+machine; no public demo login or deployment is provided. On Windows 10, run in
+WSL2 Ubuntu because the existing backend uses POSIX file guards. No API key or
+paid model request is needed in fixture mode. `--customer demo-b` selects the
+other synthetic identity **at the trusted launcher**, never in a customer widget.
+
+Choose English or العربية. Chat can list products, explain policies, and check
+the bound customer's own order (DEMO-100 for demo-a, DEMO-200 for demo-b).
+Support-ticket requests display the exact editable draft, with distinct Confirm
+and Cancel actions. Editing revokes pending consent. Confirmation resumes the
+same task without resetting counters; cancellation makes no provider request.
+API token/cost/limit information stays in backend records and documentation.
+Product prices are ordinary store information, separate from API cost accounting.
+
+```sh
+PHASE4_EVIDENCE_DIR=artifacts/phase4-evidence .venv/bin/pytest -q --tb=short
+.venv/bin/ruff check .
+.venv/bin/ruff format --check .
+uv pip check --python .venv/bin/python
+uv lock --check --offline
+uv build --offline
+```
+
+Final Phase 4 regression: **135 passed, 0 failed, 0 skipped**. The malicious
+product, forged-consent, and poisoned-memory scenarios passed their boundary
+checks with genuine MCP and explicitly scripted provider decisions. They do not
+establish live-model prompt-injection robustness. Unique ignored evidence files
+retain each run; safety blocks are not exported as explicit task-failure traces.
+See [PHASE_4.md](docs/PHASE_4.md) for workflow, security findings, commands, and limits.
+Phase 5 remains unauthorized; nothing has been deployed.

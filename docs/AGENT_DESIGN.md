@@ -1,7 +1,8 @@
 # Supporting agent design and tool contracts
 
 Status: Phase 3 implements one OpenAI SDK agent over the Phase 2 storage and MCP tools.
-Live OpenAI compatibility/availability and UI remain unverified or planned.
+Phase 4 adds a locally tested bilingual Streamlit UI; live OpenAI behavior and
+production authentication/deployment remain unverified or planned.
 These details support [agent_spec.md](../agent_spec.md).
 The official six-element summary is in that one-page specification; detailed
 security mechanisms here are project design choices, not additional book requirements.
@@ -69,7 +70,8 @@ Order/consent grants expire after 5 minutes; demo sessions after 1 hour.
 The trusted adapter hides wire reference fields from model-facing schemas/results
 and provides a local confirmation-registration API; it is not an LLM agent.
 Its `cancel_ticket` hook revokes pending server-side consent on draft edits or
-cancellation. Production authentication and the Streamlit consent UI are pending.
+cancellation. Phase 4 implements the local Streamlit consent UI; production
+authentication remains pending. See [PHASE_4.md](PHASE_4.md).
 
 ## 3. Termination conditions
 

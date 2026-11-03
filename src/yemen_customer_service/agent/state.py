@@ -10,7 +10,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from yemen_customer_service.agent.pricing import Pricing, Usage
 from yemen_customer_service.storage.store import Store, digest
-from yemen_customer_service.tool_server.models import SafeError
+from yemen_customer_service.tool_server.models import SafeError, TicketDraft
 
 
 class Limits(BaseModel):
@@ -129,6 +129,80 @@ class Journal:
     def save(self, state: TaskState) -> None:
         with self.store.db.connect(write=True) as conn:
             self._save(conn, state)
+
+    def edit_ticket(self, task_id: str, draft: TicketDraft) -> None:
+        """Trusted UI edit: atomically revoke pending consent and replace its payload.
+
+        Preserve task counters, pricing, session and idempotency key. This is not
+        an MCP/model tool. A running/finished task cannot be edited.
+        """
+        with self.store.db.connect(write=True) as conn:
+            identity = self.store.session(conn, self.token)
+            row = conn.execute(
+                "SELECT value FROM metadata WHERE key=?", (self.key(task_id),)
+            ).fetchone()
+            if row is None:
+                raise SafeError("ACCESS_DENIED")
+            state = TaskState.model_validate_json(row[0])
+            if (
+                state.session_hash != identity["token_hash"]
+                or state.running
+                or state.status != "awaiting_confirmation"
+                or not state.queue
+                or state.queue[0]["name"] != "create_support_ticket"
+            ):
+                raise SafeError("ACCESS_DENIED")
+            original = state.queue[0]
+            if draft.idempotency_key != original["arguments"]["idempotency_key"]:
+                raise SafeError("INVALID_INPUT")
+            new_arguments = draft.model_dump()
+            found = False
+            for message in reversed(state.messages):
+                if message["role"] != "assistant":
+                    continue
+                for call in message.get("tool_calls", []):
+                    if (
+                        call["id"] == original["call_id"]
+                        and call["function"]["name"] == original["name"]
+                    ):
+                        call["function"]["arguments"] = json.dumps(new_arguments)
+                        found = True
+                        break
+                if found:
+                    break
+            if not found:
+                raise SafeError("INVALID_INPUT")
+            original["arguments"] = new_arguments
+            conn.execute(
+                "DELETE FROM confirmations WHERE session_hash=? AND consumed=0",
+                (identity["token_hash"],),
+            )
+            self._save(conn, state)
+
+    def cancel_ticket(self, task_id: str) -> None:
+        """Trusted UI cancellation needs no provider, new request, or new task."""
+        with self.store.db.connect(write=True) as conn:
+            identity = self.store.session(conn, self.token)
+            row = conn.execute(
+                "SELECT value FROM metadata WHERE key=?", (self.key(task_id),)
+            ).fetchone()
+            if row is None:
+                raise SafeError("ACCESS_DENIED")
+            state = TaskState.model_validate_json(row[0])
+            if (
+                state.session_hash != identity["token_hash"]
+                or state.running
+                or state.status != "awaiting_confirmation"
+            ):
+                raise SafeError("ACCESS_DENIED")
+            conn.execute(
+                "DELETE FROM confirmations WHERE session_hash=? AND consumed=0",
+                (identity["token_hash"],),
+            )
+            state.status = "confirmation_declined"
+            state.answer = "Ticket request cancelled."
+            self._save(conn, state)
+        self.audit(state, "deny", "CONFIRMATION_DECLINED")
 
     def reserve(self, state: TaskState, pricing: Pricing, amount: Decimal) -> int:
         if state.turns >= state.limits.turns or state.held_usd + amount > state.limits.budget_usd:
