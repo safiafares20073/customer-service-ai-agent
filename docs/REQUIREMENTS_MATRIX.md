@@ -1,5 +1,24 @@
 # Requirements matrix
 
+## Phase 5 Step 1 status clarification — 2026-11-03
+
+Planning/evidence preparation only. Remote merged main
+`0fe6d114e649efa318a7da0bd0350e2b55e56cbe` was checked against all 59 tracked
+local files; contents match. Phase 4 is committed, pushed and merged; historical
+“uncommitted” wording below describes its implementation-time review.
+An owner-reported Codespaces live smoke succeeded, but its files have not been
+received or independently validated here. “Live pending” below therefore remains
+accurate for repository-verifiable live evidence, not a denial of that report.
+No new live calls, trace files, measured cost analysis, production authentication
+or deployment were created in Step 1. Existing fixture results are not relabeled.
+
+The [final acceptance checklist](FINAL_SUBMISSION_CHECKLIST.md) separates official
+academic requirements from project safeguards and optional enhancements.
+[Step 1 baseline and file/test inventory](PHASE_5_STEP_1.md),
+[evidence import protocol](EVIDENCE_IMPORT_PROTOCOL.md), and
+[minimal hosted design](HOSTED_DEMO_DESIGN.md) are design documents, not runtime
+implementation evidence. No proposed tests are reported as executed.
+
 Source reviewed: supplied `Week5_Capstone_Official_Chapter12_10.pdf`, §12.10,
 printed pp. 578–581. Page citations refer to printed book pages. Requirements
 below are paraphrased from that excerpt, not inferred from adjacent sections.
