@@ -2,14 +2,17 @@
 
 LLM4Yemen Track B, Week 5 capstone.
 
-**Current status: Phase 2 — SQLite storage and real MCP stdio integration.**
-The seven-tool official FastMCP server, synthetic database, trusted client adapter,
-and automated protocol/security tests are implemented. There is no LLM agent
-loop, Streamlit UI, public deployment, or submission trace yet.
+**Current status: Phase 3 implementation; live OpenAI validation pending.**
+One official OpenAI SDK agent discovers and calls the existing seven MCP tools
+through genuine stdio communication. It includes scoped SQLite memory, task
+resumption, cost reservations/accounting, time/turn limits, and redacted JSONL
+metadata tracing. Tests use explicitly labeled provider fixtures and real MCP.
+No live OpenAI execution, billed-cost measurement, Streamlit UI, public deployment,
+or submission trace is claimed.
 
-The planned application is a single LLM agent that answers product and policy
+The application is a single LLM agent designed to answer product and policy
 questions, checks authorized orders, and creates support tickets after consent.
-It will use the official Python MCP SDK, SQLite persistence, permission checks,
+It uses the official Python MCP SDK, SQLite persistence, permission checks,
 audit logs, and USD cost accounting.
 
 Read [the agent specification](agent_spec.md),
@@ -20,11 +23,12 @@ Read [the agent specification](agent_spec.md),
 
 ```text
 src/yemen_customer_service/
-  agent/          # Future LLM loop and budget enforcement
+  agent/          # OpenAI loop, durable state, pricing, traces, guarded console
   tool_server/    # Official SDK FastMCP server, trusted adapter, console demo
   storage/        # SQLite migrations, synthetic fixtures, authorized operations
   ui/             # Future Streamlit interface
 tests/
+  agent/          # SDK-provider fixtures + real MCP, limits, process restart
   unit/
   integration/
   security/
@@ -75,7 +79,54 @@ The tests launch real stdio MCP subprocesses; direct handler calls do not replac
 integration tests. A restricted runner must permit subprocess stdio/event-loop
 operations. Never bypass tests when the runner cannot support them.
 
-`.env.example` has no credentials. The server reads process environment variables;
-it does **not** automatically load `.env`. Memory and cost tables are foundations:
-agent memory policy, actual LLM usage/cost accounting, and hard budget enforcement
-remain Phase 3. Approval is required before that phase. Nothing has been deployed.
+## Phase 3 agent
+
+Safe preflight, with no API request:
+
+```sh
+.venv/bin/customer-service-agent --preflight
+```
+
+The provisional model is `gpt-6-luna`, configurable through `OPENAI_MODEL`.
+Credentials come from `OPENAI_API_KEY` or `LLM_API_KEY`; never put values in source
+control or chat. Commands read process environment variables and do not load
+`.env` automatically. Pricing is model-specific, dated, and recorded in
+[config/model_pricing.json](config/model_pricing.json): the user's official
+corrected Standard excerpt dated November 3, 2026 lists USD 0.10 input, 0.50
+output, and 0.01 cached input per million tokens. Independent retrieval was blocked;
+live model/account availability and tool-calling execution remain unverified.
+The [compatibility audit](docs/OPENAI_COMPATIBILITY_AUDIT.md) corrected the
+previous Flex/Batch rates mislabeled as Standard and now explicitly sets
+`reasoning_effort="none"`, as required for this model’s Chat Completions function
+calling. Documented support relies on your verified source excerpt; actual live
+account/model behavior remains untested.
+
+No paid call is enabled by default. After separate explicit paid-run approval,
+secure credential setup, and live model checks, the guarded invocation is:
+
+```sh
+.venv/bin/customer-service-agent --allow-paid --enable-demo-auth --customer demo-a "Find headphones under $30"
+```
+
+This command has **not** been run against OpenAI in this phase. It uses synthetic
+fixture identity only, not production authentication. Ticket requests pause for
+review of the exact draft and an explicit `CONFIRM`; declining performs no write.
+Task counters and costs survive confirmation and agent-process resumption.
+
+The agent permits at most eight SDK requests, USD 0.05 in conservative estimated
+cost, 60 cumulative active seconds, and 10 seconds per tool. SDK retries are
+disabled. Missing usage or unsupported pricing stops further requests without
+inventing zero cost. Token-based computed costs are not provider invoices.
+No model substitution or alternate pricing tier is attempted on provider errors.
+
+See [Phase 3 implementation, verification, and limitations](docs/PHASE_3.md).
+Provider-fixture estimates and JSONL evidence are explicitly labeled; they do not
+prove live model behavior. Raw prompts/answers/arguments are excluded from traces.
+The original Phase 2 schema and all seven tool contracts are preserved. Phase 4,
+including its prompt-injection acceptance exercises, remains unauthorized.
+
+A [single-task live smoke test](docs/LIVE_SMOKE_TEST.md) is prepared but has not
+been executed. Its safe preflight is
+`.venv/bin/python -m yemen_customer_service.agent.smoke --preflight`.
+The paid runner requires separate explicit approval and has a persistent
+one-attempt interlock. Fixture rehearsals do not establish live success.

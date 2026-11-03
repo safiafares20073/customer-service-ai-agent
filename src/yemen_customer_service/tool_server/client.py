@@ -6,6 +6,7 @@ The server still authorizes every call independently.
 
 from __future__ import annotations
 
+import asyncio
 import copy
 import os
 import sys
@@ -14,6 +15,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 
+import anyio
 from jsonschema import Draft202012Validator
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
@@ -22,6 +24,40 @@ from yemen_customer_service.storage.store import Store, payload_hash
 from yemen_customer_service.tool_server.models import SafeError, TicketDraft
 
 PRIVATE_FIELDS = {"access_reference", "confirmation_reference"}
+
+
+@asynccontextmanager
+async def protocol_session(parameters: StdioServerParameters) -> AsyncIterator[ClientSession]:
+    """Drain late responses only during intentional SDK subprocess shutdown.
+
+    SDK 1.30's stdio reader can race a closed session after a timed-out call.
+    Give the session cloned streams and keep the transport receiver alive until
+    the server exits. No tool result is fabricated or accepted by this drain.
+    """
+    drain = None
+
+    async def discard_late_messages(read):
+        try:
+            async for _ in read:
+                pass
+        except (anyio.ClosedResourceError, anyio.EndOfStream):
+            pass
+
+    try:
+        async with stdio_client(parameters) as (read, write):
+            try:
+                async with ClientSession(read.clone(), write.clone()) as session:
+                    await session.initialize()
+                    yield session
+            finally:
+                drain = asyncio.create_task(discard_late_messages(read))
+    finally:
+        if drain is not None:
+            drain.cancel()
+            try:
+                await drain
+            except asyncio.CancelledError:
+                pass
 
 
 class TrustedClient:
@@ -115,6 +151,5 @@ async def connect(
         args=["-m", "yemen_customer_service.tool_server.server"],
         env=env,
     )
-    async with stdio_client(params) as (read, write), ClientSession(read, write) as session:
-        await session.initialize()
+    async with protocol_session(params) as session:
         yield TrustedClient(session, store, token)

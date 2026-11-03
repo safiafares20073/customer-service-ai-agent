@@ -1,5 +1,8 @@
 # Phase 2: SQLite and genuine MCP integration
 
+Historical Phase 2 scope/evidence. Current agent functionality is described in
+[PHASE_3.md](PHASE_3.md); the Phase 2 tests and database schema remain intact.
+
 Implemented scope: storage, exactly seven FastMCP tools, trusted local adapter,
 synthetic console demo, and automated tests. No LLM loop, Streamlit, deployment,
 live-provider runs, submission traces, cost analysis, or coverage claim.

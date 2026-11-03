@@ -1,6 +1,6 @@
 # Agent specification
 
-Design contract: Phase 2 implements storage and MCP tools; the LLM agent remains planned.
+Design contract: Phase 3 implements the agent loop; live OpenAI validation is pending.
 Source: supplied Chapter 12.10 excerpt, printed pp. 578–581. Detailed contracts
 and security design: [supporting design](docs/AGENT_DESIGN.md).
 
@@ -31,8 +31,8 @@ and limits. A deterministic limit response must not incur another LLM request.
 
 ## 4. Budget cap
 
-**USD 0.05 per task**, including retries. Reserve conservative request costs before
-calling the model; record actual tokens and verified model pricing in SQLite.
+**USD 0.05 estimated per task**, including retries. Reserve conservative request costs
+before calling the model; record reported tokens and dated model pricing in SQLite.
 Unknown price or usage stops further calls; never fabricate zero cost.
 
 ## 5. Permission policy

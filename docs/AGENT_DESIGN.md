@@ -1,7 +1,8 @@
 # Supporting agent design and tool contracts
 
-Status: Phase 2 implements the storage, seven MCP tools, and trusted adapter.
-LLM-loop behavior and UI remain planned. These details support [agent_spec.md](../agent_spec.md).
+Status: Phase 3 implements one OpenAI SDK agent over the Phase 2 storage and MCP tools.
+Live OpenAI compatibility/availability and UI remain unverified or planned.
+These details support [agent_spec.md](../agent_spec.md).
 The official six-element summary is in that one-page specification; detailed
 security mechanisms here are project design choices, not additional book requirements.
 
@@ -89,7 +90,10 @@ extra LLM request to compose that response.
 
 ## 4. USD budget per task
 
-Hard limit: **USD 0.05 per customer task**, including all LLM requests and retries.
+Pre-request estimated limit: **USD 0.05 per customer task**, including all LLM
+requests and retries. The latest Phase 3 request explicitly requires an estimated
+cap; it cannot guarantee a provider's invoice if reported usage violates the
+conservative bound. Such usage is recorded truthfully and stops further calls.
 New tasks require an explicit new customer request; do not reset the budget
 mid-loop. Ticket confirmation and resuming the same pending request retain its
 task ID, accumulated usage, turn count, and remaining budget. Time awaiting human
@@ -103,7 +107,11 @@ configured maximum output tokens at a verified model price. Reconcile using
 provider usage afterward. If price or usage cannot be determined, stop further
 model requests and mark cost as unknown; never record a fabricated zero. Initial
 model selection, verified pricing, and token limits are a later-phase prerequisite.
-No paid requests are authorized or executed by Phase 1.
+No paid requests are authorized or executed in this implementation session.
+
+The current provisional model and Standard pricing are in `config/model_pricing.json`,
+from the user's dated official excerpt; see [PHASE_3.md](PHASE_3.md) for provenance,
+reservation assumptions, counter persistence, and live-validation limitations.
 
 ## 5. Permission policy
 

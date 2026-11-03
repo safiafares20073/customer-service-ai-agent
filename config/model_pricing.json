@@ -1,0 +1,14 @@
+{
+  "model": "gpt-6-luna",
+  "tier": "standard",
+  "input_usd_per_million": "0.10",
+  "cached_input_usd_per_million": "0.01",
+  "output_usd_per_million": "0.50",
+  "source_url": "https://developers.openai.com/api/docs/pricing",
+  "verified_on": "2026-11-03",
+  "verification_timezone": "Asia/Aden",
+  "verification_method": "user_supplied_official_excerpt",
+  "model_source_url": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+  "model_guide_url": "https://developers.openai.com/api/docs/guides/latest-model",
+  "compatibility": "documented_chat_completions_tools_with_reasoning_none_live_account_unverified"
+}
