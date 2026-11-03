@@ -1,0 +1,49 @@
+services:
+  - type: web
+    name: yemen-customer-service-review
+    runtime: docker
+    plan: starter
+    numInstances: 1
+    autoDeployTrigger: off
+    healthCheckPath: /healthz
+    disk:
+      name: customer-service-private-data
+      mountPath: /var/lib/customer-service
+      sizeGB: 1
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: ENABLE_DEMO_AUTH
+        value: "false"
+      - key: UI_PROVIDER
+        value: openai
+      - key: HOSTED_DATA_DIR
+        value: /var/lib/customer-service
+      - key: OPENAI_MODEL
+        value: gpt-6-luna
+      - key: MODEL_PRICING_FILE
+        value: /app/config/model_pricing.json
+      - key: HOSTED_PAID_ENABLED
+        value: "false"
+      - key: HOSTED_GLOBAL_BUDGET_USD
+        value: "0"
+      - key: HOSTED_PRINCIPAL_BUDGET_USD
+        value: "0"
+      - key: HOSTED_APPROVAL_UNTIL
+        value: "0"
+      - key: HOSTED_REVIEWERS_JSON
+        value: "[]"
+      - key: HOSTED_ORIGIN
+        sync: false
+      - key: OIDC_ISSUER
+        sync: false
+      - key: OIDC_METADATA_URL
+        sync: false
+      - key: OIDC_CLIENT_ID
+        sync: false
+      - key: OIDC_CLIENT_SECRET
+        sync: false
+      - key: HOSTED_COOKIE_SECRET
+        sync: false
+      - key: HOSTED_PRINCIPAL_SECRET
+        sync: false

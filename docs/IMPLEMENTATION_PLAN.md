@@ -136,7 +136,8 @@ traces or manufacture screenshots, test counts, or coverage.
   cannot satisfy persistence.
 - Configure secure secrets, TLS, real authentication, per-customer authorization,
   request limits, and appropriate data retention. Disable demo identity mode.
-  The platform and authentication provider remain undecided.
+  Render is selected for the prepared single-container configuration; real provider
+configuration and deployment acceptance remain pending.
 - Keep MCP stdio private within the deployment. Do not expose database files,
   debug output, secrets, or internal security references to public clients.
 - Run startup, functional acceptance, access-denial, and restart-persistence checks
@@ -175,3 +176,20 @@ when redacting and document redactions. Preserve failures and distinguish
 fixture tests from live-provider behavior. Never commit
 secrets or customer data. Do not expand to additional agents or tools without
 revising the specification and obtaining approval.
+
+
+## Phase 5 secure-hosting preparation — November 4, 2026
+
+Authorized implementation is prepared from merged cost-analysis main. See
+[SECURE_HOSTING.md](SECURE_HOSTING.md) for the exact boundaries and executed checks,
+and [DEPLOYMENT.md](DEPLOYMENT.md) for the gated release procedure. Added native
+OIDC invitation authorization, separate production UI/startup, a versioned hosted
+SQLite extension, durable shared spending reservations/kill state, bounded
+concurrency, private retention controls, Render disk/container/proxy configuration
+and offline authentication/security/restart/UI tests. Development mode remains
+local-only, the seven tool contracts and original traces remain unchanged.
+
+Actual deployment, real IdP/cookie/browser acceptance, public URL, manual narrow
+screen review and separately approved live chat are remaining release gates.
+Neither a healthy local container nor mocked issuer tests complete those gates.
+No paid calls or account provisioning occurs during preparation.

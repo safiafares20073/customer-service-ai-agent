@@ -70,7 +70,14 @@ INTERNAL = re.compile(
 def customer_text(value: str, locale: str, *, hide_internal: bool = True) -> str:
     if hide_internal and INTERNAL.search(value):
         return COPY[locale]["fallback"]
-    for key in ("OPENAI_API_KEY", "LLM_API_KEY", "CS_SESSION_TOKEN"):
+    for key in (
+        "OPENAI_API_KEY",
+        "LLM_API_KEY",
+        "CS_SESSION_TOKEN",
+        "OIDC_CLIENT_SECRET",
+        "HOSTED_COOKIE_SECRET",
+        "HOSTED_PRINCIPAL_SECRET",
+    ):
         secret = os.getenv(key)
         if secret and len(secret) >= 8:
             value = value.replace(secret, "[redacted]")

@@ -2,7 +2,7 @@
 
 LLM4Yemen Track B, Week 5 capstone.
 
-**Current status: Phase 5 reviewed execution traces and recorded cost analysis.**
+**Current status: secure invite-only hosted demo prepared for review; not deployed.**
 One official OpenAI SDK agent discovers and calls seven MCP tools over genuine
 stdio, with scoped SQLite memory, permissions, cost controls and a locally tested
 Arabic/English Streamlit UI. Three reviewed execution traces are available:
@@ -15,8 +15,9 @@ and [explicit failure](traces/explicit_failure.jsonl). The terminal failure rema
 recorded model requests and November 3, 2026 Standard rates. This is usage-derived
 estimated cost, not independently verified provider billing. Monthly model-token
 projections and limitations are documented in that file. No paid calls were made
-for the analysis. Secure public authentication/deployment, browser/mobile visual
-review and final submission documentation remain pending.
+for the analysis. Invite-only OIDC authentication, durable hosted spending controls
+and Render container configuration are implemented and tested offline. Real hosted
+login, deployment, browser/mobile visual review and final submission remain pending.
 
 The [gated evidence runner](docs/LIVE_TRACE_RUNNER.md) remains paid-disabled by
 default; further execution requires separate approval. Current setup and historical
@@ -39,7 +40,8 @@ src/yemen_customer_service/
   evidence/       # Separately gated trace scenarios and durable plan limits
   tool_server/    # Official SDK FastMCP server, trusted adapter, console demo
   storage/        # SQLite migrations, synthetic fixtures, authorized operations
-  ui/             # Local-only bilingual Streamlit app and trusted controller
+  ui/             # Bilingual local demo and separate invite-only hosted UI
+  hosting/        # OIDC authorization, private startup, persistent spending gates
 tests/
   agent/          # SDK-provider fixtures + real MCP, limits, process restart
   unit/
@@ -80,7 +82,9 @@ use the SDK client or the demo rather than typing human commands into it.
 An unbound server permits public reads and rejects private operations.
 
 ```sh
-.venv/bin/pytest -q
+
+# Full suite now requires a real Caddy binary; see docs/DEPLOYMENT.md.
+CADDY_TEST_BINARY=/tmp/hosting-caddy .venv/bin/pytest -q
 .venv/bin/ruff check .
 .venv/bin/ruff format --check .
 uv pip check --python .venv/bin/python
@@ -184,5 +188,31 @@ checks with genuine MCP and explicitly scripted provider decisions. They do not
 establish live-model prompt-injection robustness. Unique ignored evidence files
 retain each run; safety blocks are not exported as explicit task-failure traces.
 See [PHASE_4.md](docs/PHASE_4.md) for workflow, security findings, commands, and limits.
-Phase 5 trace and cost documentation are prepared; public authentication and
-deployment remain pending. Do not expose this development identity workflow.
+Phase 5 trace and cost documentation are complete. The separate production path
+below is prepared; do not expose this development identity workflow.
+
+
+## Invite-only hosted demo preparation
+
+[Deployment instructions](docs/DEPLOYMENT.md) and
+[security/verification details](docs/SECURE_HOSTING.md) describe the prepared
+Render architecture: one Docker service, Caddy public proxy, loopback Streamlit,
+private stdio MCP and a dedicated persistent SQLite disk. A public login page
+requires native OIDC plus privately invited issuer/subject pairs. There are no
+shared review accounts, public development identities or preloaded customer orders.
+The production entrypoint refuses development/fixture databases and absent mounts.
+
+The default reviewer list is empty, paid calls are disabled, allowances are zero
+and the persistent kill switch is ON. Separately approved spending needs positive
+principal/global allowances, an expiry and a private operator enable action.
+Transactional reservations, one active task operation and sticky unknown-usage
+blocks survive restart. Existing task limits and exact ticket consent remain.
+No real OIDC provider, public URL, deployment or paid run is claimed by this work.
+All three original traces and the cost analysis remain byte-for-byte unchanged.
+
+Build with `docker build -t customer-service-hosted:review .`; the linked guide
+includes real-proxy test setup, locked dependency checks, secure host variables,
+assessor invitations, retention and backup cautions. Do not launch a public demo
+before the deployment/security acceptance gates in that guide. Current hosted
+verification results are recorded in docs/SECURE_HOSTING.md; provider fixtures
+and offline OIDC tests are explicitly distinguished from live execution.

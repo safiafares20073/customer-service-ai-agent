@@ -20,13 +20,14 @@ from yemen_customer_service.storage.database import Database
 from yemen_customer_service.storage.store import Store
 from yemen_customer_service.tool_server.client import connect
 from yemen_customer_service.tool_server.models import SafeError, TicketDraft
-from yemen_customer_service.ui.fixture_provider import demonstration_provider
 from yemen_customer_service.ui.presentation import COPY, customer_text, outcome_message
 
 
 def make_provider() -> OpenAIProvider:
     mode = os.getenv("UI_PROVIDER", "fixture")
     if mode == "fixture":
+        from yemen_customer_service.ui.fixture_provider import demonstration_provider
+
         return demonstration_provider()
     if mode == "openai" and os.getenv("UI_PAID_APPROVED") == "true":
         return OpenAIProvider.from_environment(paid_approved=True)
@@ -57,7 +58,11 @@ class Controller:
             raise SafeError("ACCESS_DENIED")
         self.store = Store(Database(database_path))
         self.store.db.initialize(seed_demo=True)
-        self._customer = customer_id  # Trusted launcher only; never a browser selector.
+        self._initialize(self.store, customer_id, provider_factory)
+
+    def _initialize(self, store, customer_id, provider_factory):
+        self.store = store
+        self._customer = customer_id  # Trusted server only; never a browser selector.
         self._provider_factory = provider_factory or make_provider
         self._pending: Pending | None = None
         self._lock = threading.Lock()
@@ -66,6 +71,11 @@ class Controller:
         self.status = "ready"
         self.revision = 0
         self.error = ""
+
+    def _new_token(self):
+        return self.store.provision_demo_session(
+            self._customer, enable_demo_auth=True, app_env="development"
+        )
 
     @property
     def busy(self) -> bool:
@@ -143,9 +153,7 @@ class Controller:
             self.messages.append(("user", request))
             self.error = ""
             self.status = "working"
-            token = self.store.provision_demo_session(
-                self._customer, enable_demo_auth=True, app_env="development"
-            )
+            token = self._new_token()
             result = asyncio.run(self._operate(token, request=request))
             self._accept(token, result, locale)
         except Exception:
