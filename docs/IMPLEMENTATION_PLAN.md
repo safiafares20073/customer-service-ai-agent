@@ -1,6 +1,13 @@
 # Implementation plan
 
-Phases 1–4 are authorized; Phase 5 requires approval before work begins.
+Current trace-preparation work is documented in [TRACE_SCENARIOS.md](TRACE_SCENARIOS.md):
+offline-only provider-fixture rehearsals with real MCP, a controlled test-server
+storage fault and harness-only public-read retry, plus an explicit one-turn task
+failure. No production failure policy changes or official fixture submission
+files. Live collection needs the separately bounded approval described there.
+
+Phases 1–4 are complete. Phase 5 planning, success-evidence review and offline
+trace rehearsals are authorized. Live calls and hosting require separate approval.
 Phase 2 evidence is recorded in [PHASE_2.md](PHASE_2.md) and the requirements matrix.
 Phase 3 evidence and live-validation limitations are recorded in [PHASE_3.md](PHASE_3.md).
 Phase 4 evidence and local UI limitations are recorded in [PHASE_4.md](PHASE_4.md).

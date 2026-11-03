@@ -1,5 +1,19 @@
 # Requirements matrix
 
+## Remaining trace rehearsals — fixture evidence only
+
+See [controlled trace scenarios](TRACE_SCENARIOS.md). On merged-main baseline
+`c051375cae765f22229d06aec6b288eb8e76ad82`, an offline harness executes a real
+catalog storage fault followed by one successful MCP retry within the same task,
+and a separate one-turn terminal failure. Provider decisions/usage are scripted;
+MCP initialization/discovery/calls and SQLite side effects are real. Production
+loop, server, adapter, security behavior and success_1.jsonl are unchanged.
+Controlled recovery is a harness-only adapter policy, not live-model reasoning
+or production auto-retry. The two official recovery/failure files remain missing;
+fixture evidence is retained privately and is not promoted to live evidence.
+The linked plan bounds a future separately approved live attempt; no paid calls
+or hosting changes are performed in this step.
+
 ## Reviewed live success evidence — 2026-11-03
 
 [traces/success_1.jsonl](../traces/success_1.jsonl) now contains the unchanged
