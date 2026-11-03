@@ -1,19 +1,26 @@
 # Customer Service AI Agent
 
-Phase 5 update: the success trace has been reviewed and the remaining live-trace
-runner is now **prepared, not executed**. See [gates, no-cost preflight and later
-Codespaces commands](docs/LIVE_TRACE_RUNNER.md). No new paid calls or public
-deployment are claimed. Earlier phase-status sections below retain their context.
-
 LLM4Yemen Track B, Week 5 capstone.
 
-**Current status: Phase 4 local Streamlit UI and adversarial fixture validation.**
-One official OpenAI SDK agent discovers and calls the existing seven MCP tools
-through genuine stdio communication. It includes scoped SQLite memory, task
-resumption, cost reservations/accounting, time/turn limits, and redacted JSONL
-metadata tracing. Tests use explicitly labeled provider fixtures and real MCP.
-The Arabic/English customer UI is implemented and tested locally. No live OpenAI
-execution, billed-cost measurement, public deployment, or submission trace is claimed.
+**Current status: Phase 5 reviewed execution traces and recorded cost analysis.**
+One official OpenAI SDK agent discovers and calls seven MCP tools over genuine
+stdio, with scoped SQLite memory, permissions, cost controls and a locally tested
+Arabic/English Streamlit UI. Three reviewed execution traces are available:
+[success](traces/success_1.jsonl), [controlled recovery](traces/near_failure_recovery.jsonl)
+and [explicit failure](traces/explicit_failure.jsonl). The terminal failure remains
+`turn_limit`; fixture tests are kept separate from these live-labeled records.
+
+[Cost analysis](cost_analysis.md): **USD 0.0006260 total**, approximately
+**USD 0.000208666667 per attempted task (n=3, including the failure)**, from six
+recorded model requests and November 3, 2026 Standard rates. This is usage-derived
+estimated cost, not independently verified provider billing. Monthly model-token
+projections and limitations are documented in that file. No paid calls were made
+for the analysis. Secure public authentication/deployment, browser/mobile visual
+review and final submission documentation remain pending.
+
+The [gated evidence runner](docs/LIVE_TRACE_RUNNER.md) remains paid-disabled by
+default; further execution requires separate approval. Current setup and historical
+phase evidence follow below. No public demo URL or hosting completion is claimed.
 
 The application is a single LLM agent designed to answer product and policy
 questions, checks authorized orders, and creates support tickets after consent.
@@ -29,6 +36,7 @@ Read [the agent specification](agent_spec.md),
 ```text
 src/yemen_customer_service/
   agent/          # OpenAI loop, durable state, pricing, traces, guarded console
+  evidence/       # Separately gated trace scenarios and durable plan limits
   tool_server/    # Official SDK FastMCP server, trusted adapter, console demo
   storage/        # SQLite migrations, synthetic fixtures, authorized operations
   ui/             # Local-only bilingual Streamlit app and trusted controller
@@ -99,12 +107,14 @@ control or chat. Commands read process environment variables and do not load
 [config/model_pricing.json](config/model_pricing.json): the user's official
 corrected Standard excerpt dated November 3, 2026 lists USD 0.10 input, 0.50
 output, and 0.01 cached input per million tokens. Independent retrieval was blocked;
-live model/account availability and tool-calling execution remain unverified.
+subsequent supplied execution records have been reviewed, while provider origin,
+current account availability and billed costs remain independently unverified.
 The [compatibility audit](docs/OPENAI_COMPATIBILITY_AUDIT.md) corrected the
 previous Flex/Batch rates mislabeled as Standard and now explicitly sets
 `reasoning_effort="none"`, as required for this model’s Chat Completions function
-calling. Documented support relies on your verified source excerpt; actual live
-account/model behavior remains untested.
+calling. Documented support relies on the verified source excerpt; later reviewed
+execution records are linked above and do not independently authenticate a provider
+exchange or current account access.
 
 No paid call is enabled by default. After separate explicit paid-run approval,
 secure credential setup, and live model checks, the guarded invocation is:
@@ -129,8 +139,9 @@ Provider-fixture estimates and JSONL evidence are explicitly labeled; they do no
 prove live model behavior. Raw prompts/answers/arguments are excluded from traces.
 The original Phase 2 schema and all seven tool contracts are preserved.
 
-A [single-task live smoke test](docs/LIVE_SMOKE_TEST.md) is prepared but has not
-been executed. Its safe preflight is
+The [single-task live smoke harness](docs/LIVE_SMOKE_TEST.md) produced the supplied
+reviewed success record; see [validation scope](docs/SUCCESS_EVIDENCE_VALIDATION.md).
+Its safe preflight is
 `.venv/bin/python -m yemen_customer_service.agent.smoke --preflight`.
 The paid runner requires separate explicit approval and has a persistent
 one-attempt interlock. Fixture rehearsals do not establish live success.
@@ -173,4 +184,5 @@ checks with genuine MCP and explicitly scripted provider decisions. They do not
 establish live-model prompt-injection robustness. Unique ignored evidence files
 retain each run; safety blocks are not exported as explicit task-failure traces.
 See [PHASE_4.md](docs/PHASE_4.md) for workflow, security findings, commands, and limits.
-Phase 5 remains unauthorized; nothing has been deployed.
+Phase 5 trace and cost documentation are prepared; public authentication and
+deployment remain pending. Do not expose this development identity workflow.
