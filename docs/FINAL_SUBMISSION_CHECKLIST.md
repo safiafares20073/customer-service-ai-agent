@@ -18,7 +18,7 @@ requirements. Evidence must identify its commit, environment and provenance.
 | [x] USD budget per task | Day 1 p. 579 | USD 0.05 estimated cap |
 | [x] Permission mode | Day 1 p. 579 | ask_on_write and server-enforced private-read ownership |
 | [x] Three I/O success examples | Day 1 p. 579 | All three specified; examples are not execution evidence |
-| [ ] Basic single-agent tool loop, five inputs, JSONL | Day 2 p. 579 | Five fixture scenarios already tested through MCP; preserve labeled results and inspect genuine live evidence; no multi-agent |
+| [ ] Basic single-agent tool loop, five inputs, JSONL | Day 2 p. 579 | Five fixture scenarios tested through MCP; one live-labeled product/policy success reviewed; full final acceptance remains pending; no multi-agent |
 | [ ] At least one MCP server | Day 3 p. 580 | Existing real official SDK stdio tests; rerun regression for final candidate |
 | [ ] SQLite memory remembers after restart | Day 3 p. 580 | Existing cross-process scoped fixture tests; rerun for final candidate |
 | [ ] Permission layer, audit log, cost tracker | Day 4 p. 580 | Existing tested implementation; verify hosted access/spending gates and records |
@@ -28,7 +28,7 @@ requirements. Evidence must identify its commit, environment and provenance.
 | [ ] README and average cost | Day 5 p. 580 | Update actual setup/demo/limitations and measured average with sample size |
 | [ ] Public GitHub repository | LMS item 1 p. 581 | Repository archive accessible during review; verify logged-out web visibility of final submission commit |
 | [ ] Live demo URL | LMS item 2 p. 581 | Public landing/login URL plus privately supplied assessor access; do not publish credentials |
-| [ ] traces/success_1.jsonl | LMS item 3 p. 581 | Reviewed actual successful agent execution, not generated sample events |
+| [x] traces/success_1.jsonl | LMS item 3 p. 581 | Imported unchanged live-labeled success trace; report/SQLite/audits/usage cross-checked offline; billing unverified; see SUCCESS_EVIDENCE_VALIDATION.md |
 | [ ] traces/near_failure_recovery.jsonl | LMS item 3 p. 581 | Actual problem and recovery within one task; disclose controlled fault |
 | [ ] traces/explicit_failure.jsonl | LMS item 3 p. 581 | Actual terminal incomplete task, not a successful safety-block relabeling |
 | [ ] agent_spec.md submitted | LMS item 4 p. 581 | Final six-element one-page file linked in submission |
@@ -55,8 +55,8 @@ are explicit project quality requirements; do not attribute them to unseen text.
 - [ ] Live calls disabled without separately approved allowance; no model/tier fallback.
 - [ ] Persistent SQLite storage with tested restart and private backup/restore procedure.
 - [ ] Actual final test/static/build outcomes recorded; no reduced security suite.
-- [ ] Codespaces evidence inspected before promotion beyond user-reported status.
-- [ ] Original evidence retained; derived exports traceable and redactions documented.
+- [x] Codespaces success evidence inspected against supplied report, SQLite and historical pricing; no independent provider receipt or invoice verification.
+- [x] Success originals and attempt.lock retained privately; export matches original SHA256 with no redactions. Recovery/failure evidence remains pending.
 - [ ] English/Arabic, RTL, narrow screens and browser behavior reviewed honestly.
 - [ ] Submission contains no real customer data; invitee login identifiers stay private.
 - [ ] Limitations distinguish fixture, live, hosted, visual and billing verification.

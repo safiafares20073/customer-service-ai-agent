@@ -1,6 +1,21 @@
 # Requirements matrix
 
-## Phase 5 Step 1 status clarification — 2026-11-03
+## Reviewed live success evidence — 2026-11-03
+
+[traces/success_1.jsonl](../traces/success_1.jsonl) now contains the unchanged
+10-event success trace for task `fa24226fb82347b299bf17662bead7ac`.
+[Validation report](SUCCESS_EVIDENCE_VALIDATION.md) records cross-checks against
+the original report, SQLite task/state, MCP audits, three usage records and dated
+pricing. Totals: 2,789 input tokens, 82 output, zero cached as recorded; computed
+USD 0.0003199. The answer agrees with the recorded product/policy results.
+Original bundles, database and attempt.lock remain private and unchanged.
+This verifies consistency of supplied live-labeled execution records, not an
+independent provider receipt, invoice, current model availability or deployment.
+No new API calls were made. Other live scenarios and recovery/failure traces
+remain pending. Step 1 statements below are historical and superseded only for
+this reviewed success evidence.
+
+## Historical Phase 5 Step 1 status clarification — 2026-11-03
 
 Planning/evidence preparation only. Remote merged main
 `0fe6d114e649efa318a7da0bd0350e2b55e56cbe` was checked against all 59 tracked
@@ -27,8 +42,9 @@ excerpt; a monthly cost projection is the documented interpretation.
 
 Phase 4 adds a locally tested Arabic/English Streamlit customer interface and
 adversarial boundary tests to the existing OpenAI SDK agent and seven real MCP tools.
-Provider-fixture execution is verified; live model/account validation and public
-deployment remain pending. “Documented” never implies runtime validation. See
+Provider-fixture execution and supplied success-record consistency are verified;
+independent provider authentication/billing and public deployment remain pending.
+“Documented” never implies runtime validation. See
 [PHASE_4.md](PHASE_4.md), [PHASE_3.md](PHASE_3.md), and the historical
 [PHASE_2.md](PHASE_2.md).
 
@@ -36,7 +52,7 @@ deployment remain pending. “Documented” never implies runtime validation. Se
 
 | Official item | Source | Implementation / evidence location | Current verification status |
 | --- | --- | --- | --- |
-| Solve a real task end-to-end, public URL, cost tracking | Goal, p. 578 | Agent, deployment, tracker; plan Phases 2–5 | Agent/MCP orchestration and accounting verified with provider fixtures; live task quality and public URL pending |
+| Solve a real task end-to-end, public URL, cost tracking | Goal, p. 578 | Agent, deployment, tracker; plan Phases 2–5 | Agent/MCP orchestration and accounting fixture-tested; supplied live-labeled product/policy success records reviewed; public URL pending |
 | Choose one of eight domains | Day 1, pp. 578–579 | Customer service, `agent_spec.md` §1 | Documented: listed domain selected |
 | One-page `agent_spec.md` | Day 1, p. 579 | Concise six-section `agent_spec.md`; detailed contracts moved to supporting design | Verified: temporary A4 PDF is one page at 10pt, 12pt leading, 36pt margins; other renderers may paginate differently |
 | Goal in one sentence | Day 1, p. 579 | `agent_spec.md` §1 | Documented |
@@ -45,24 +61,24 @@ deployment remain pending. “Documented” never implies runtime validation. Se
 | Budget cap in USD/task | Day 1, p. 579 | `agent_spec.md` §4 | USD 0.05 estimated cap with conservative reservations tested; live token bounds and billing unverified |
 | Policy mode: auto / ask_on_write / always_ask | Day 1, p. 579 | `agent_spec.md` §5 | Local UI confirmation/cancel/edit plus agent/MCP authority verified; production login pending |
 | Three input/output success examples | Day 1, p. 579 | `agent_spec.md` §6 | Fixture executions passed with real MCP; live examples remain unverified |
-| Basic tool-calling loop; no multi-agent yet | Day 2, p. 579 | `agent/`; plan Phase 3 | Implemented: one official OpenAI SDK loop; provider-fixture tests passed; live compatibility pending |
-| Test on five inputs | Day 2, p. 579 | Five cases enumerated in plan Phase 3 | All five scenarios executed with SDK provider fixtures and real MCP; live inference not run |
-| Save JSONL traces | Day 2, p. 579 | Actual loop runs; plan Phase 3 and submission checklist | Metadata JSONL from actual agent executions labeled provider_fixture; live/submission traces pending |
+| Basic tool-calling loop; no multi-agent yet | Day 2, p. 579 | `agent/`; plan Phase 3 | Implemented: one official OpenAI SDK loop; fixtures and supplied Codespaces success records reviewed; no independent provider receipt |
+| Test on five inputs | Day 2, p. 579 | Five cases enumerated in plan Phase 3 | All five scenarios fixture-tested with real MCP; supplied live product/policy success reviewed; other live scenarios pending |
+| Save JSONL traces | Day 2, p. 579 | Actual loop runs; plan Phase 3 and submission checklist | Fixture traces retain their labels; one unchanged live-labeled success submission trace reviewed; recovery/failure pending |
 | Bind at least one MCP server (own server allowed) | Day 3, p. 580 | `tool_server/`; plan Phase 2 | Verified: official FastMCP 1.30.0 stdio subprocess; initialize, discover and call tests pass |
 | SQLite memory; remembers after restart | Day 3, p. 580 | `storage/`, agent restart test; plan Phase 3 | Separate agent OS processes remember a scoped conversation fact; cross-customer isolation verified with provider fixtures |
 | Permission layer and audit log | Day 4, p. 580 | Server and storage; plan Phases 2–3 | Agent, MCP and trusted UI boundaries tested; production authentication pending |
-| Cost tracker | Day 4, p. 580 | Agent and SQLite task/call costs; plan Phase 3 | Implemented: Decimal usage accounting, durable reservations, cache handling, unknown-cost stop; fixture estimates only so far |
+| Cost tracker | Day 4, p. 580 | Agent and SQLite task/call costs; plan Phase 3 | Implemented: Decimal accounting and durable reservations; supplied three-call live usage reconciles to USD 0.0003199; invoice unverified |
 | Three hostile prompt-injection inputs; must not be deceived | Day 4, p. 580 | Three explicit cases in plan Phase 4 with outcome/side-effect checks | Phase 4: product, forged-consent and persistent-memory cases executed with scripted provider attacks + real MCP; all boundary assertions passed; live robustness unverified |
 | Simple Streamlit UI | Day 5, p. 580 | `ui/`; plan Phase 4 | Implemented and tested locally with Streamlit 1.66.1 AppTest and actual loopback server; Arabic/English and approval flows verified |
 | Deploy to Render or Railway | Day 5, p. 580 | Plan Phase 5 | Planned; no host selected or deployment |
 | Write README and document average cost | Day 5, p. 580 | README; measured average added in Phase 5 | README reflects Phase 4; actual billed average cost remains unmeasured |
 | Public GitHub repository | LMS item 1, p. 581 | Current project repository | Repository exists locally; public visibility unverified |
 | Live demo URL | LMS item 2, p. 581 | Verified deployed service | Missing until Phase 5 |
-| `traces/success_1.jsonl` | LMS item 3, p. 581 | Actual successful run, sanitized submission trace | Missing; future deliverable |
+| `traces/success_1.jsonl` | LMS item 3, p. 581 | Unchanged supplied success trace; docs/SUCCESS_EVIDENCE_VALIDATION.md | Complete locally: report/SQLite/MCP audits/tokens/cost checked; provider receipt and billing unverified |
 | `traces/near_failure_recovery.jsonl` | LMS item 3, p. 581 | Actual recovery run, sanitized submission trace | Missing; future deliverable |
 | `traces/explicit_failure.jsonl` | LMS item 3, p. 581 | Actual failed run, sanitized submission trace | Missing; future deliverable |
 | Submit `agent_spec.md` | LMS item 4, p. 581 | Root specification | Present; final submission not performed |
-| `cost_analysis.md`: avg cost/task and monthly projection | LMS item 5, p. 581 | Measured sample and documented projection assumptions; plan Phase 5 | Missing; no costs measured |
+| `cost_analysis.md`: avg cost/task and monthly projection | LMS item 5, p. 581 | Measured sample and documented projection assumptions; plan Phase 5 | Missing document; one supplied task usage-cost calculation reviewed; average/projection and billing reconciliation pending |
 
 The book's Day 1–5 time allocations are recorded in the implementation plan.
 They are planning guidance, not measured execution evidence. The supplied excerpt
@@ -91,7 +107,7 @@ about extra official rubric requirements.
 | Minimal Python structure; no dependency shadowing | `pyproject.toml`, `src/yemen_customer_service/`, `tests/` | File presence, TOML parse; verify no top-level `mcp.py` or `mcp/` | Verified: official mcp/openai import-origin tests; no dependency shadowing; locked dependencies |
 | Safe configuration | `.gitignore`, `.env.example` | Inspect empty credential field and ignore rules; no real credentials added | Empty credential template, explicit paid gate, demo opt-in and no key printing tested/reviewed |
 | Accurate documentation and roadmap | `README.md`, `docs/IMPLEMENTATION_PLAN.md`, this matrix | Inspect status language and phased acceptance criteria | Updated for actual Phase 4 behavior, latest no-cost-panel requirement, retained failures, and remaining deployment/live work |
-| Single-agent LLM loop | `agent/` | Controlled-response tests plus separately identified live LLM run | Implemented with official OpenAI SDK 2.54.0; deterministic SDK fixture validation passed; live runs pending |
+| Single-agent LLM loop | `agent/` | Controlled-response tests plus separately identified live LLM run | Implemented with official OpenAI SDK 2.54.0; fixtures passed and supplied Codespaces success records reviewed; provider origin not independently authenticated |
 | Genuine official MCP integration | `tool_server/`, agent MCP client | Official SDK dependency/version; actual stdio initialization, discovery, calls | Agent and all seven tools exercised using real initialized stdio ClientSessions; no mock MCP |
 | `list_products` | `tool_server/` | MCP call verifies pagination, result limits, summaries | Implemented; verified by test_discovery_and_all_public_tools plus malformed-input cases |
 | `search_products` | `tool_server/` | MCP call verifies matching, bounded query, safe SQL | Implemented; real MCP matching and SQL-literal search verified |
@@ -104,12 +120,12 @@ about extra official rubric requirements.
 | Server-side permissions | `tool_server/`, trusted session context | Unauthorized calls denied even when UI/agent is bypassed | Verified through direct MCP clients, independent of trusted adapter checks |
 | Trusted security references and ticket confirmation | Client adapter, `tool_server/` | References hidden from model; forged/cross-session references denied; paired order fields; atomic consent; identical retry succeeds without duplicate and changed-payload retry fails | Implemented adapter and server checks; hiding, expiry, cancel, scope, payload binding and retries tested |
 | Audit logging | `storage/`, `tool_server/`, `agent/` | Assert allow/deny/error events, task correlation, redaction | MCP and agent lifecycle events implemented; no raw prompts, messages, references, or exception text in logs |
-| Cost tracking and hard limit | `agent/`, `storage/` | Actual usage accounting; reservation, retry, unknown usage, limit tests | Estimated cap, usage/cached-token accounting, reservations, unknown usage and oversize usage tested; live costs pending |
+| Cost tracking and hard limit | `agent/`, `storage/` | Actual usage accounting; reservation, retry, unknown usage, limit tests | Estimated cap and usage edge cases fixture-tested; supplied three-call usage reconciled at historical rates; billed cost unverified |
 | Limits across ticket confirmation/resumption | `agent/`, trusted task state | Same task retains usage/turns/active-time limits; deterministic limit response makes no LLM call | Same task ID, session, counters, elapsed time, cost and original limits persist; tested across real process exit/resumption |
 | Prompt-injection defenses | `tests/security/` and permission boundary | Malicious catalog, policies, memory, messages, and results cannot authorize side effects or leak data | Three hostile scenarios + exhausted-limit subcase passed with scripted provider fixtures and actual MCP; not a claim of universal live LLM robustness |
 | Streamlit UI | `ui/` | Executed chat, confirmation, cost-display, and session-isolation smoke checks | Verified: bilingual/RTL chat, exact editable draft, confirm/cancel, duplicate/replay/session guards, safe errors; API accounting/debug details excluded from customer views |
 | Public deployment | Render or Railway configuration to be selected | Actual public endpoint, authenticated functional checks, persistent-volume restart | 5: planned |
-| Honest tests, traces, and coverage | Future test suite; ignored `artifacts/` | Actual runner outputs with commit/versions; no zero-test readiness claim | 135 passed, 0 failed, 0 skipped; 113 existing tests unchanged; fixture evidence labeled; no live/submission traces or coverage claims |
+| Honest tests, traces, and coverage | Future test suite; ignored `artifacts/` | Actual runner outputs with commit/versions; no zero-test readiness claim | 135 passed, 0 failed, 0 skipped; 113 existing tests unchanged; fixture evidence labeled; reviewed live-labeled success trace added; no coverage claim |
 | No secrets committed | Ignore rules and secure configuration practices | Review staged changes before any future commit; inspect safe configuration | No secrets added; Phase 4 changes uncommitted; generated databases, costs, logs and test evidence remain ignored |
 
 ## Historical Phase 2 verification
