@@ -119,3 +119,25 @@ cost_analysis.md remain unchanged.
 - [ ] Separately authorize bounded OpenAI spending before any live hosted chat;
   fresh pricing, restricted key, expiry, positive budgets and private enable required.
 - [ ] Privately arrange assessor access and publish the verified login URL only.
+
+
+## Railway Free preparation update — November 4, 2026
+
+See [RAILWAY_DEPLOYMENT.md](RAILWAY_DEPLOYMENT.md). Railway is now preferred over
+the preserved Render alternative, conditional on Free entitlements, credit and
+network access. No paid-plan upgrade or infrastructure provisioning is authorized.
+
+- [x] Official Railway source limits and native IaC format reviewed with source revision.
+- [x] Native configuration locked and evaluated offline (4 passing checks).
+- [x] Local 500 MB/1-vCPU/no-swap fixture workload, real MCP, bilingual UI, consent
+  and restart checks pass; observed peak 225.3 MiB, no OOM.
+- [x] Full regression: 258 passed, 0 failed, 0 skipped; previous tests unmodified.
+- [x] Real hosted OpenAI path preserved and ready for private approved activation;
+  no fixture fallback, paid execution or deployment performed here.
+- [ ] Actual Free account/region/volume/credit/egress confirmed without upgrading.
+- [ ] Explicitly approved deployment, real OIDC/TLS/WebSocket and mobile acceptance.
+- [ ] Current model/pricing/account recheck, bounded spending approval and private enable.
+- [ ] Separately approved live hosted OpenAI task, assessor access and public login URL.
+
+Original trace and measured-cost completion gates remain intact. These preparation
+checks do not complete the official deployment/live-URL deliverable.

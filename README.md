@@ -2,7 +2,7 @@
 
 LLM4Yemen Track B, Week 5 capstone.
 
-**Current status: secure invite-only hosted demo prepared for review; not deployed.**
+**Current status: Railway Free invite-only hosting preparation; not deployed.**
 One official OpenAI SDK agent discovers and calls seven MCP tools over genuine
 stdio, with scoped SQLite memory, permissions, cost controls and a locally tested
 Arabic/English Streamlit UI. Three reviewed execution traces are available:
@@ -16,7 +16,8 @@ recorded model requests and November 3, 2026 Standard rates. This is usage-deriv
 estimated cost, not independently verified provider billing. Monthly model-token
 projections and limitations are documented in that file. No paid calls were made
 for the analysis. Invite-only OIDC authentication, durable hosted spending controls
-and Render container configuration are implemented and tested offline. Real hosted
+and hosting configuration are implemented and tested offline. Railway Free is the
+preferred, conditionally compatible platform; real hosted
 login, deployment, browser/mobile visual review and final submission remain pending.
 
 The [gated evidence runner](docs/LIVE_TRACE_RUNNER.md) remains paid-disabled by
@@ -196,7 +197,7 @@ below is prepared; do not expose this development identity workflow.
 
 [Deployment instructions](docs/DEPLOYMENT.md) and
 [security/verification details](docs/SECURE_HOSTING.md) describe the prepared
-Render architecture: one Docker service, Caddy public proxy, loopback Streamlit,
+original Render architecture: one Docker service, Caddy public proxy, loopback Streamlit,
 private stdio MCP and a dedicated persistent SQLite disk. A public login page
 requires native OIDC plus privately invited issuer/subject pairs. There are no
 shared review accounts, public development identities or preloaded customer orders.
@@ -216,3 +217,27 @@ assessor invitations, retention and backup cautions. Do not launch a public demo
 before the deployment/security acceptance gates in that guide. Current hosted
 verification results are recorded in docs/SECURE_HOSTING.md; provider fixtures
 and offline OIDC tests are explicitly distinguished from live execution.
+
+
+## Railway Free (preferred; conditional readiness)
+
+Use [RAILWAY_DEPLOYMENT.md](docs/RAILWAY_DEPLOYMENT.md) for current official-source
+limits, the practical deployment/secret/OIDC guide, live-chat enable steps and
+remaining acceptance. It supersedes Render as the preferred platform; do not
+apply render.yaml or select a paid plan. One persistent volume is still required.
+The native `.railway/railway.ts` configuration uses a separately locked authoring
+SDK, rather than deprecated railway.json/toml. No automatic apply/deploy runs.
+
+Current checks: **258 Python tests passed, 0 failed, 0 skipped**, one upstream
+Authlib warning; **4 offline IaC checks passed**. A local container capped at
+500 MB RAM / 1 vCPU reached a maximum across two samples of **236,281,856 bytes (225.3 MiB)** with genuine MCP,
+scripted provider calls, bilingual AppTest, consent and restart checks. This is
+fixture resource evidence, not a live Railway/OpenAI/browser capacity guarantee.
+The source lists only USD 1/month Free credit; continuous operation is not promised.
+
+Real OpenAI chat is preserved and can be enabled by private configuration and an
+explicit operator action after separate spending approval, current model/pricing
+review and deployed acceptance. Preparation used no paid requests, deployment,
+real reviewer accounts or secrets. All original traces and cost_analysis.md remain
+unchanged. Actual Free account/credit/egress, OIDC login, HTTPS/WebSockets, mobile
+review and a separately approved hosted OpenAI task remain pending.

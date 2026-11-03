@@ -1,4 +1,8 @@
-# Render deployment preparation (not deployed)
+# Render alternative deployment preparation (not deployed)
+
+Railway Free is now preferred, subject to the conditions in
+[RAILWAY_DEPLOYMENT.md](RAILWAY_DEPLOYMENT.md). This file preserves the original
+Render alternative; do not provision its paid service/disk without separate approval.
 
 This is an invitation-only synthetic capstone demo. The container and offline
 checks are prepared; a public URL and real authentication acceptance are pending.

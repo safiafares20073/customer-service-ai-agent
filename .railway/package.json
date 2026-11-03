@@ -1,0 +1,9 @@
+{
+  "name": "customer-service-railway-configuration",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {"node": ">=22.18"},
+  "scripts": {"test": "node --experimental-strip-types test-config.mjs"},
+  "dependencies": {"railway": "3.12.0"}
+}
