@@ -1,6 +1,24 @@
 # Requirements matrix
 
-## Gated live runner preparation — not live execution
+## Reviewed live recovery evidence — 2026-11-03
+
+[traces/near_failure_recovery.jsonl](../traces/near_failure_recovery.jsonl) is now
+imported unchanged for task `561a396ba302496aa17a278bc928daff`: nine events,
+one disclosed list_products storage fault, one harness-controlled retry and
+successful completion in the same task. The two usage records total 1,861 input,
+53 output, zero cached tokens as recorded, and computed USD 0.0002126.
+[RECOVERY_EVIDENCE_VALIDATION.md](RECOVERY_EVIDENCE_VALIDATION.md) preserves the
+supplied independent report and explains the current import validation scope.
+The original trace hash stated by that report matches the received bytes.
+The private databases/ledger and raw model answer are not in this public ZIP;
+the prior reviewer reports their corroboration, which was not repeated here.
+Neither provider origin nor invoiced billing is independently authenticated.
+This is adapter-controlled recovery, not model-led self-repair. No new API call
+was made during import. Only the explicit-failure submission trace remains missing.
+Historical preparation/rehearsal statements below are superseded for this recovery
+artifact only; fixture evidence has not been relabeled.
+
+## Historical gated live runner preparation — not live execution
 
 [LIVE_TRACE_RUNNER.md](LIVE_TRACE_RUNNER.md) documents the separately gated runner,
 shared reviewed recovery policy, durable two-task/nine-attempt/USD 0.10 estimated
@@ -9,7 +27,7 @@ labels and actual MCP subprocesses. No paid requests, new live traces, hosting
 or independent billing verification occur. The two remaining official submission
 files stay pending until qualifying live executions and independent review.
 
-## Remaining trace rehearsals — fixture evidence only
+## Historical remaining trace rehearsals — fixture evidence only
 
 See [controlled trace scenarios](TRACE_SCENARIOS.md). On merged-main baseline
 `c051375cae765f22229d06aec6b288eb8e76ad82`, an offline harness executes a real
@@ -34,9 +52,9 @@ USD 0.0003199. The answer agrees with the recorded product/policy results.
 Original bundles, database and attempt.lock remain private and unchanged.
 This verifies consistency of supplied live-labeled execution records, not an
 independent provider receipt, invoice, current model availability or deployment.
-No new API calls were made. Other live scenarios and recovery/failure traces
-remain pending. Step 1 statements below are historical and superseded only for
-this reviewed success evidence.
+No new API calls were made during success import. Recovery evidence is now
+reviewed as described above; explicit failure and other live scenarios remain
+pending. Step 1 statements below are historical.
 
 ## Historical Phase 5 Step 1 status clarification — 2026-11-03
 
@@ -83,14 +101,14 @@ independent provider authentication/billing and public deployment remain pending
 | Termination: max_turns + budget + final_answer | Day 1, p. 579 | `agent_spec.md` §3 | Implemented; fixture tests verify final answers, eight requests, cost reservations, timeouts, and no extra final request |
 | Budget cap in USD/task | Day 1, p. 579 | `agent_spec.md` §4 | USD 0.05 estimated cap with conservative reservations tested; live token bounds and billing unverified |
 | Policy mode: auto / ask_on_write / always_ask | Day 1, p. 579 | `agent_spec.md` §5 | Local UI confirmation/cancel/edit plus agent/MCP authority verified; production login pending |
-| Three input/output success examples | Day 1, p. 579 | `agent_spec.md` §6 | Fixture executions passed with real MCP; live examples remain unverified |
+| Three input/output success examples | Day 1, p. 579 | `agent_spec.md` §6 | Fixture executions passed with real MCP; supplied product/policy and catalog-recovery evidence reviewed; live order/ticket examples remain unverified |
 | Basic tool-calling loop; no multi-agent yet | Day 2, p. 579 | `agent/`; plan Phase 3 | Implemented: one official OpenAI SDK loop; fixtures and supplied Codespaces success records reviewed; no independent provider receipt |
 | Test on five inputs | Day 2, p. 579 | Five cases enumerated in plan Phase 3 | All five scenarios fixture-tested with real MCP; supplied live product/policy success reviewed; other live scenarios pending |
-| Save JSONL traces | Day 2, p. 579 | Actual loop runs; plan Phase 3 and submission checklist | Fixture traces retain their labels; one unchanged live-labeled success submission trace reviewed; recovery/failure pending |
+| Save JSONL traces | Day 2, p. 579 | Actual loop runs; plan Phase 3 and submission checklist | Fixture traces retain their labels; unchanged success and recovery live-labeled traces reviewed; explicit failure pending |
 | Bind at least one MCP server (own server allowed) | Day 3, p. 580 | `tool_server/`; plan Phase 2 | Verified: official FastMCP 1.30.0 stdio subprocess; initialize, discover and call tests pass |
 | SQLite memory; remembers after restart | Day 3, p. 580 | `storage/`, agent restart test; plan Phase 3 | Separate agent OS processes remember a scoped conversation fact; cross-customer isolation verified with provider fixtures |
 | Permission layer and audit log | Day 4, p. 580 | Server and storage; plan Phases 2–3 | Agent, MCP and trusted UI boundaries tested; production authentication pending |
-| Cost tracker | Day 4, p. 580 | Agent and SQLite task/call costs; plan Phase 3 | Implemented: Decimal accounting and durable reservations; supplied three-call live usage reconciles to USD 0.0003199; invoice unverified |
+| Cost tracker | Day 4, p. 580 | Agent and SQLite task/call costs; plan Phase 3 | Implemented: Decimal accounting and reservations; success raw usage reconciled to USD 0.0003199; recovery trace/report cost verified at USD 0.0002126; invoices unverified |
 | Three hostile prompt-injection inputs; must not be deceived | Day 4, p. 580 | Three explicit cases in plan Phase 4 with outcome/side-effect checks | Phase 4: product, forged-consent and persistent-memory cases executed with scripted provider attacks + real MCP; all boundary assertions passed; live robustness unverified |
 | Simple Streamlit UI | Day 5, p. 580 | `ui/`; plan Phase 4 | Implemented and tested locally with Streamlit 1.66.1 AppTest and actual loopback server; Arabic/English and approval flows verified |
 | Deploy to Render or Railway | Day 5, p. 580 | Plan Phase 5 | Planned; no host selected or deployment |
@@ -98,10 +116,10 @@ independent provider authentication/billing and public deployment remain pending
 | Public GitHub repository | LMS item 1, p. 581 | Current project repository | Repository exists locally; public visibility unverified |
 | Live demo URL | LMS item 2, p. 581 | Verified deployed service | Missing until Phase 5 |
 | `traces/success_1.jsonl` | LMS item 3, p. 581 | Unchanged supplied success trace; docs/SUCCESS_EVIDENCE_VALIDATION.md | Complete locally: report/SQLite/MCP audits/tokens/cost checked; provider receipt and billing unverified |
-| `traces/near_failure_recovery.jsonl` | LMS item 3, p. 581 | Actual recovery run, sanitized submission trace | Missing; future deliverable |
+| `traces/near_failure_recovery.jsonl` | LMS item 3, p. 581 | Unchanged reviewed trace; docs/RECOVERY_EVIDENCE_VALIDATION.md | Complete locally: SHA256, event order, one-task retry, tokens/cost and report consistency verified; private DB checks attributed to prior reviewer; billing unverified |
 | `traces/explicit_failure.jsonl` | LMS item 3, p. 581 | Actual failed run, sanitized submission trace | Missing; future deliverable |
 | Submit `agent_spec.md` | LMS item 4, p. 581 | Root specification | Present; final submission not performed |
-| `cost_analysis.md`: avg cost/task and monthly projection | LMS item 5, p. 581 | Measured sample and documented projection assumptions; plan Phase 5 | Missing document; one supplied task usage-cost calculation reviewed; average/projection and billing reconciliation pending |
+| `cost_analysis.md`: avg cost/task and monthly projection | LMS item 5, p. 581 | Measured sample and documented projection assumptions; plan Phase 5 | Missing document; success and recovery usage-cost calculations reviewed; average/projection and billing reconciliation pending |
 
 The book's Day 1–5 time allocations are recorded in the implementation plan.
 They are planning guidance, not measured execution evidence. The supplied excerpt
@@ -126,7 +144,7 @@ about extra official rubric requirements.
 | Termination: turns, budget, final answer | `agent_spec.md` §3 | Inspect explicit limits; runtime boundary tests planned | Implemented and verified in Phase 3 provider-fixture tests; live bounds unverified |
 | USD budget per task | `agent_spec.md` §4 | Inspect USD 0.05 limit; reservation and usage tests planned | Conservative estimated pre-request cap and usage reconciliation verified; not a provider invoice guarantee |
 | Permission policy | `agent_spec.md` §5; `docs/AGENT_DESIGN.md` §5 | Inspect ownership and confirmation rules; denial tests planned | Trusted UI, per-session identity, explicit consent/edit/cancel and server-side checks verified with real MCP; no public demo login |
-| Three input/output success examples | `agent_spec.md` §6; detailed fixtures in `docs/AGENT_DESIGN.md` §6 | Inspect three fixture-based examples; acceptance runs planned | Fixture executions passed with real MCP; live examples remain unverified |
+| Three input/output success examples | `agent_spec.md` §6; detailed fixtures in `docs/AGENT_DESIGN.md` §6 | Inspect three fixture-based examples; acceptance runs planned | Fixture executions passed with real MCP; supplied product/policy and catalog-recovery evidence reviewed; live order/ticket examples remain unverified |
 | Minimal Python structure; no dependency shadowing | `pyproject.toml`, `src/yemen_customer_service/`, `tests/` | File presence, TOML parse; verify no top-level `mcp.py` or `mcp/` | Verified: official mcp/openai import-origin tests; no dependency shadowing; locked dependencies |
 | Safe configuration | `.gitignore`, `.env.example` | Inspect empty credential field and ignore rules; no real credentials added | Empty credential template, explicit paid gate, demo opt-in and no key printing tested/reviewed |
 | Accurate documentation and roadmap | `README.md`, `docs/IMPLEMENTATION_PLAN.md`, this matrix | Inspect status language and phased acceptance criteria | Updated for actual Phase 4 behavior, latest no-cost-panel requirement, retained failures, and remaining deployment/live work |
@@ -148,7 +166,7 @@ about extra official rubric requirements.
 | Prompt-injection defenses | `tests/security/` and permission boundary | Malicious catalog, policies, memory, messages, and results cannot authorize side effects or leak data | Three hostile scenarios + exhausted-limit subcase passed with scripted provider fixtures and actual MCP; not a claim of universal live LLM robustness |
 | Streamlit UI | `ui/` | Executed chat, confirmation, cost-display, and session-isolation smoke checks | Verified: bilingual/RTL chat, exact editable draft, confirm/cancel, duplicate/replay/session guards, safe errors; API accounting/debug details excluded from customer views |
 | Public deployment | Render or Railway configuration to be selected | Actual public endpoint, authenticated functional checks, persistent-volume restart | 5: planned |
-| Honest tests, traces, and coverage | Future test suite; ignored `artifacts/` | Actual runner outputs with commit/versions; no zero-test readiness claim | 135 passed, 0 failed, 0 skipped; 113 existing tests unchanged; fixture evidence labeled; reviewed live-labeled success trace added; no coverage claim |
+| Honest tests, traces, and coverage | Future test suite; ignored `artifacts/` | Actual runner outputs with commit/versions; no zero-test readiness claim | 187 passed, 0 failed, 0 skipped on recovery import; fixture regressions remain labeled; reviewed live-labeled success and recovery traces added; no coverage claim |
 | No secrets committed | Ignore rules and secure configuration practices | Review staged changes before any future commit; inspect safe configuration | No secrets added; Phase 4 changes uncommitted; generated databases, costs, logs and test evidence remain ignored |
 
 ## Historical Phase 2 verification
