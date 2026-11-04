@@ -91,12 +91,15 @@ git diff --check
 ```
 
 The Caddy test fails if its real binary is unavailable; it is not silently skipped.
-In a managed proxy environment only, the optional build flag
---secret id=proxy_ca,src=/etc/ssl/certs/ca-certificates.crt supplies existing public
-CA trust via BuildKit. Do not disable TLS verification or put private credentials
-in build arguments. The allowlisted build context excludes data, artifacts,
-submission traces, .env, tests and local auth configuration. Only public source,
-model pricing, locked dependencies and Caddy configuration enter the image.
+Use the standard build command above without BuildKit secret mounts. Railway's
+Dockerfile validator rejects those mounts even when the CA is optional. Pip and
+uv retain normal verified HTTPS trust; the image contains no custom CA or
+certificate override. A local corporate proxy requiring additional trust must be
+handled by that environment's supported builder setup, without weakening TLS or
+adding session-specific trust to this deployment Dockerfile. Do not put private
+credentials in build arguments. The allowlisted build context excludes data,
+artifacts, submission traces, .env, tests and local auth configuration. Only public
+source, model pricing, locked dependencies and Caddy configuration enter the image.
 
 The launcher refuses a missing mount, symlinks, an unprivate data directory,
 wrong owner, production fixture data, development accounts and invalid settings.
