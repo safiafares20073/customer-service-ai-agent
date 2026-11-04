@@ -2,6 +2,7 @@
 
 import os
 import re
+import unicodedata
 from html import escape
 
 from yemen_customer_service.agent.tracing import safe_text
@@ -113,3 +114,20 @@ def assistant_markdown(value: str, locale: str) -> str:
     for character in "[]$":
         value = value.replace(character, "\\" + character)
     return value
+
+
+def message_direction(value: str, locale: str) -> str:
+    """Prefer the message's strong-script words, not a page-wide Markdown override.
+
+    Code/IDs and the store's currency unit are neutral for this small display
+    heuristic. No message text becomes HTML or CSS. Ties use the selected locale.
+    """
+    plain = re.sub(r"`[^`]*`|\bUSD\b", "", value)
+    words = re.findall(r"[^\W\d_]+", plain, flags=re.UNICODE)
+    arabic = sum(any(unicodedata.bidirectional(c) == "AL" for c in w) for w in words)
+    latin = sum(any(c.isascii() and c.isalpha() for c in w) for w in words)
+    if arabic > latin:
+        return "rtl"
+    if latin > arabic:
+        return "ltr"
+    return "rtl" if locale == "ar" else "ltr"

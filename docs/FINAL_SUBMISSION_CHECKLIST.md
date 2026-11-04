@@ -1,7 +1,9 @@
 # Final submission acceptance checklist
 
-Status as of 2026-11-04 (Asia/Aden). The owner reports Railway/Google/live chat;
-final hosted ticket and professor acceptance remain pending. See FINAL_VALIDATION.md.
+Status as of 2026-11-04 (Asia/Aden). The owner reports Railway/Google/live chat and
+hosted tickets are working. The latest dark/RTL/email-invitation candidate still
+needs review and actual first-login/browser acceptance. See
+PROFESSOR_ACCESS_AND_DARK_RTL.md; earlier validation notes are historical.
 Unchecked means final acceptance is pending;
 it does not imply the existing implementation is missing. Historical fixture
 results are in the requirements matrix. This checklist introduces no new official
@@ -170,3 +172,26 @@ records exact tests/visuals and honest remaining limitations.
 
 Recommendation: GO for independent review, NO-GO for claiming final hosted ticket
 resolution or unconditional submission readiness before these outstanding checks.
+
+
+## Latest three-fix review gate
+
+- [x] Pre-polish reference identified: a9bae01 native colors; dark base restored.
+- [x] Computed local assistant Arabic paragraph/list/item/marker/heading RTL and
+  English-on-Arabic-page LTR checked in actual Chromium desktop/mobile emulation.
+- [x] Safe Markdown, mixed Latin product names/IDs/USD, native controls and ticket
+  flow preserved; contrast and no-overflow/pointer checks recorded.
+- [x] Optional exact Google-email invitation securely enrolls only verified native
+  identities; legacy subject list retained. No professor token or manual sub needed.
+- [x] Additive invitation extension tested for race/replay, idempotent migration,
+  restart and preservation of sessions/memory/ledger/limits.
+- [ ] Independently review/merge this branch; no automatic deployment authorized.
+- [ ] Privately add the professor's primary email to Google Test Users if required
+  and HOSTED_REVIEWER_EMAILS_JSON, preserving existing lists, budget and expiry.
+- [ ] Separately deploy the reviewed candidate on the same volume after pending
+  drafts are completed; verify real Google first login, legacy user access and
+  actual Arabic bot paragraphs/bullets on desktop/mobile.
+- [ ] Complete assessor access and final academic submission after those checks.
+
+The owner reports the existing live business flows passed. Local fixture/browser
+checks do not newly certify this candidate's hosted behavior or provider billing.

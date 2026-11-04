@@ -2,49 +2,31 @@
 
 Demo: https://yemen-customer-service-review-production.up.railway.app
 
-The owner reports the Railway service and Google login are operational. The final
-polish is a review candidate; no deployment was performed here. The hosted ticket
-issue is not declared resolved until the reviewed commit passes the checks below.
+The owner reports the Railway service and Google login are operational. The latest
+correction is a review candidate; no deployment was performed here. The owner
+reports hosted tickets now work; this updated version still needs acceptance.
 All store data is synthetic. Please do not enter personal information.
 
 ## Administrator: give the professor access
 
-These are private manual prerequisites, not commands executed during development.
-Do not replace or reset the existing live configuration/database/spending ledger.
+The reviewed new optional email path removes the need to collect a Google sub.
+See [PROFESSOR_ACCESS_AND_DARK_RTL.md](PROFESSOR_ACCESS_AND_DARK_RTL.md) for exact
+private setup, validation, migration and revocation details. No live setting was
+changed during development.
 
-1. Confirm the deployed reviewed commit, exact HTTPS origin and registered Google
-   callback `/oauth2callback`. Keep the existing confidential Google web client.
-2. If Google's OAuth consent screen is External/Testing, add the professor's own
-   Google email as a **Google Test User** in the project's Google Auth Platform
-   Audience/Test Users settings (console labels may vary). This permits Google's
-   consent flow; it does not authorize application records or paid chat.
-3. Obtain the exact stable `sub` and `iss` from a successfully **server-validated**
-   Google OIDC identity using the operator's existing private identity-provider
-   process. The configured issuer must match exactly, normally
-   `https://accounts.google.com`. Do not infer a subject from an email, ask for a
-   password/ID token/OAuth code, use a public JWT decoder or enable debug logging.
-   This app deliberately has no public subject-discovery/registration portal.
-4. If that verified subject is not available, professor access is a **manual
-   prerequisite still pending**. Do not invent a subject or grant email-only access.
-   An account may complete Google login yet be denied by the application until its
-   private issuer/subject pair is explicitly authorized.
-5. Through the approved private operator process, append that verified pair to
-   the existing `HOSTED_REVIEWERS_JSON` list while preserving all other invitees.
-   Keep its value out of Git, screenshots and public guides. Apply only with the
-   operator's authorization. Configuring an invitation may require a controlled
-   service restart; retain the same mounted volume and all accounting state.
-6. Preserve the existing approved **USD 3** global allowance, per-principal cap,
-   expiry, rate/concurrency controls and kill state. Check availability privately;
-   do not reset counters, increase budgets or issue new spending authorization just
-   to complete the demonstration. No paid enable or configuration change is part
-   of this development workflow.
-7. Send only the public login URL and these instructions to the professor through
-   the normal private assessment process. Each professor uses their **own Google
-   account**; no shared password or application API key is supplied.
-
-The operator must verify these steps in the actual Google/Railway accounts. This
-repository does not contain their secrets, current allowlist or the professor's
-subject, and does not claim that access has already been granted.
+1. If the existing Google consent app is External/Testing, privately add the
+   professor's primary Google email to Google Auth Platform Test Users.
+2. Privately add that exact address to Railway `HOSTED_REVIEWER_EMAILS_JSON`, a JSON
+   array. Preserve all existing entries and the original HOSTED_REVIEWERS_JSON.
+   No aliases are collapsed; matching normalizes case only.
+3. Review/deploy this code only through separately approved normal procedures,
+   keeping the same volume, keys, USD 3 allowance, per-principal limit and expiry.
+4. The professor opens the public link, chooses Sign in with Google and their own
+   account. Verified Google email first enrollment binds to the stable subject;
+   later logins use that binding. No tokens, Playground, Railway access or manual
+   subject are required. If an old cookie lacks email claims, sign out/in again.
+5. Confirm login privately without a paid call. Do not reset budgets or invitations
+   to demonstrate access. The deployment/actual Google acceptance is still manual.
 
 ## Professor: demonstration within existing limits
 

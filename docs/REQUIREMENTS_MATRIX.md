@@ -1,5 +1,16 @@
 # Requirements matrix
 
+## Latest targeted correction — November 4, 2026
+
+The owner now reports real Railway Google/OpenAI/product/policy/ticket workflows
+are tested and working. The new candidate restores pre-polish native dark styling,
+scopes assistant RTL and adds optional verified-Google-email first enrollment.
+See [PROFESSOR_ACCESS_AND_DARK_RTL.md](PROFESSOR_ACCESS_AND_DARK_RTL.md) for current
+source revision, migration, actual checks and manual release gates. Prior reports
+below retain their historical validation scope; they do not imply the owner has
+not since tested the existing deployment. The new candidate has not been deployed.
+
+
 ## Current final review candidate — November 4, 2026
 
 The owner reports a deployed Railway service, Google OIDC and real OpenAI chat at
@@ -415,3 +426,16 @@ Exact final commands/counts and any retained initial failures are in
 FINAL_VALIDATION.md. No security test is removed; rendering collectors adapt to
 Markdown and the timing fixture adds explicit cancellation checks without changing
 production limits. No paid calls, secret changes, live records, deployment or merge.
+
+
+## Dark restoration / assistant RTL / professor access
+
+| Requirement | Current implementation and evidence boundary |
+| --- | --- |
+| Original visual design | Native dark base and 12 px chat corners from pre-polish a9bae01; remove light/navy/teal overrides. Measured body contrast 18.11:1 and minimally corrected native primary-label contrast 5.72:1. |
+| Assistant Arabic Markdown | Per-message native containers scope paragraphs/headings/lists/markers RTL; English messages remain LTR on Arabic page. Actual Chromium desktop/mobile checks, not CSS-string evidence alone; physical/hosted devices pending. |
+| Simple professor access | Optional private HOSTED_REVIEWER_EMAILS_JSON; exact case-only normalized primary email, Google issuer, verified cryptographic identity and boolean email_verified required for first enrollment. No portal, shared account or anonymous paid access. |
+| Stable identity and compatibility | Durable immutable email-HMAC -> issuer/subject principal binding; later authorization by subject, substitution/replay denied. Existing HOSTED_REVIEWERS_JSON remains independent. Legacy session/data/spend migration and race tests pass. |
+| Additive persistence | Base schema 2 and hosted schema 1 unchanged; invitation extension v1 creates one table plus metadata atomically/idempotently. No volume, identity, spending, budget or expiry reset. |
+| Regression and preserved scope | All baseline cases retained; new synthetic Authlib/SQLite and real MCP ticket/read/isolation tests. Exact counts and initial retained fixture failures in the targeted validation report. |
+| Hosted acceptance | Owner-reported existing business flows remain working; new code/email-first login/theme need separately approved deployment and actual professor/browser retest. No live state or paid calls changed here. |

@@ -5,10 +5,29 @@ import hmac
 import json
 import math
 import os
+import re
 from dataclasses import dataclass, field
 from decimal import Decimal
 from pathlib import Path
 from urllib.parse import urlsplit
+
+GOOGLE_ISSUER = "https://accounts.google.com"
+
+
+def normalize_email(value):
+    """Exact ASCII mailbox matching: case only, never Gmail dot/plus aliases."""
+    if not isinstance(value, str) or not 3 <= len(value) <= 254:
+        raise ValueError("Invalid email invitation")
+    if (
+        not re.fullmatch(
+            r"[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@"
+            r"(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z]{2,63}",
+            value,
+        )
+        or len(value.split("@")[0]) > 64
+    ):
+        raise ValueError("Invalid email invitation")
+    return value.lower()
 
 
 def https_url(value):
@@ -37,6 +56,7 @@ class Settings:
     principal_budget: Decimal = Decimal(0)
     session_seconds: int = 900
     tasks_per_hour: int = 5
+    email_invites: tuple[str, ...] = ()
 
     @classmethod
     def load(cls):
@@ -78,6 +98,12 @@ class Settings:
             if not isinstance(item["sub"], str) or not 1 <= len(item["sub"]) <= 256:
                 raise ValueError("Invalid reviewer subject")
             invites.append((issuer, item["sub"]))
+        email_raw = json.loads(os.getenv("HOSTED_REVIEWER_EMAILS_JSON", "[]"))
+        if not isinstance(email_raw, list) or len(email_raw) > 50:
+            raise ValueError("Invalid email invitations")
+        emails = tuple(normalize_email(v) for v in email_raw)
+        if len(set(emails)) != len(emails) or (emails and issuer != GOOGLE_ISSUER):
+            raise ValueError("Email invitations require Google and distinct addresses")
         global_budget = Decimal(os.getenv("HOSTED_GLOBAL_BUDGET_USD", "0"))
         principal_budget = Decimal(os.getenv("HOSTED_PRINCIPAL_BUDGET_USD", "0"))
         if not all(v.is_finite() and v >= 0 for v in (global_budget, principal_budget)):
@@ -110,6 +136,7 @@ class Settings:
             principal_budget,
             seconds,
             rate,
+            emails,
         )
 
     def principal(self, issuer, subject):
@@ -119,3 +146,7 @@ class Settings:
     @property
     def allowed_principals(self):
         return {self.principal(issuer, sub) for issuer, sub in self.invites}
+
+    def email_hash(self, email):
+        raw = json.dumps(["google-email-invitation", normalize_email(email)]).encode()
+        return hmac.new(self.principal_secret.encode(), raw, hashlib.sha256).hexdigest()

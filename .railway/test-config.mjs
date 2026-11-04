@@ -37,7 +37,8 @@ test("paid defaults are closed and secret values are preserved without source li
   for (const key of ["HOSTED_GLOBAL_BUDGET_USD", "HOSTED_PRINCIPAL_BUDGET_USD",
     "HOSTED_APPROVAL_UNTIL"]) assert.equal(web.variables[key].value, "0");
   for (const key of ["OPENAI_API_KEY", "LLM_API_KEY", "OIDC_CLIENT_SECRET",
-    "HOSTED_COOKIE_SECRET", "HOSTED_PRINCIPAL_SECRET", "HOSTED_REVIEWERS_JSON"]) {
+    "HOSTED_COOKIE_SECRET", "HOSTED_PRINCIPAL_SECRET", "HOSTED_REVIEWERS_JSON",
+    "HOSTED_REVIEWER_EMAILS_JSON"]) {
     assert.equal(web.variables[key].type, "preserve");
     assert.equal(web.variables[key].value, undefined);
   }

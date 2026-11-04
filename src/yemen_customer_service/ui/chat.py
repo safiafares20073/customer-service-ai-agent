@@ -4,7 +4,12 @@ import uuid
 
 import streamlit as st
 
-from yemen_customer_service.ui.presentation import COPY, assistant_markdown, customer_text
+from yemen_customer_service.ui.presentation import (
+    COPY,
+    assistant_markdown,
+    customer_text,
+    message_direction,
+)
 
 
 def render_header():
@@ -16,33 +21,22 @@ def render_header():
     rtl = locale == "ar"
     # Constant trusted CSS only. Never interpolate messages, drafts, or model HTML.
     st.html("""<style>
-    .stApp {background:#f8fafc;color:#0f172a;color-scheme:light;}
-    .block-container,[data-testid="stMainBlockContainer"] {max-width:56rem;padding-top:2rem;}
-    section.main, [data-testid="stMain"] {max-width: 100%;}
-    h1,h2,h3,label,[data-testid="stMarkdownContainer"] {color:#0f172a;}
-    [data-testid="stChatMessage"] {border-radius:14px;background:#fff;
-        border:1px solid #dbe4ec;padding:1.1rem;margin-block:.65rem;min-width:0;}
-    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"])
-        {background:#ecfdf5;border-inline-start:3px solid #0f766e;}
-    [data-testid="stChatMessageAvatarAssistant"] {background:#0f172a;color:#fff;}
-    [data-testid="stChatMessageAvatarUser"] {background:#0f766e;color:#fff;}
-    [data-testid="stChatMessageContent"] {min-width:0;overflow-wrap:anywhere;line-height:1.65;}
-    [data-testid="stMarkdownContainer"] p {line-height:1.65;}
-    [data-testid="stChatInput"] textarea,textarea,input
-        {font-size:1rem;background:#fff;color:#0f172a;}
-    textarea::placeholder,input::placeholder {color:#475569;opacity:1;}
-    [data-testid="stChatInput"]:focus-within {border-color:#0f766e;}
-    button[kind="primary"] {background:#0f766e;color:#fff;border-color:#0f766e;}
+    section.main, [data-testid="stMain"] {max-width:100%;}
+    [data-testid="stChatMessage"] {border-radius:12px;}
+    /* Native coral background retained; dark native foreground improves contrast. */
     button[kind="primary"] [data-testid="stMarkdownContainer"],
-    button[kind="primary"] p {color:#fff;}
-    button:focus-visible,input:focus-visible,textarea:focus-visible
-        {outline:3px solid #0f766e;outline-offset:3px;}
-    [data-testid="stMarkdownContainer"] code
-        {direction:ltr;unicode-bidi:isolate;display:inline-block;max-width:100%;}
-    @media(max-width:640px) {
-      .block-container,[data-testid="stMainBlockContainer"] {padding:1rem .85rem 6rem;}
-      [data-testid="stChatMessage"] {padding:.8rem;gap:.65rem;}
-    }
+    button[kind="primary"] p {color:#0e1117;}
+    [data-testid="stChatMessageContent"] {min-width:0;overflow-wrap:anywhere;}
+    [class*="st-key-assistant_rtl_"] [data-testid="stMarkdownContainer"],
+    [class*="st-key-assistant_rtl_"] :is(p,ul,ol,li,h1,h2,h3,h4,h5,h6,blockquote)
+        {direction:rtl!important;text-align:right!important;}
+    [class*="st-key-assistant_ltr_"] [data-testid="stMarkdownContainer"],
+    [class*="st-key-assistant_ltr_"] :is(p,ul,ol,li,h1,h2,h3,h4,h5,h6,blockquote)
+        {direction:ltr!important;text-align:left!important;}
+    [class*="st-key-assistant_"] :is(ul,ol)
+        {padding-inline-start:1.5rem;padding-inline-end:0;list-style-position:outside;}
+    [class*="st-key-assistant_"] code
+        {direction:ltr;unicode-bidi:isolate;display:inline-block;}
     </style>""")
     if rtl:
         st.html("""<style id="customer-direction">
@@ -72,14 +66,16 @@ def render_header():
 def render_chat(controller, locale, *, enabled=True):
     t = COPY[locale]
     rtl = locale == "ar"
-    for role, content in controller.messages:
+    for index, (role, content) in enumerate(controller.messages):
         with st.chat_message(role):
             if role == "assistant":
-                st.markdown(
-                    assistant_markdown(content, locale),
-                    unsafe_allow_html=False,
-                    text_alignment="right" if rtl else "left",
-                )
+                direction = message_direction(content, locale)
+                with st.container(key=f"assistant_{direction}_{index}"):
+                    st.markdown(
+                        assistant_markdown(content, locale),
+                        unsafe_allow_html=False,
+                        text_alignment="right" if direction == "rtl" else "left",
+                    )
             else:
                 st.text(
                     customer_text(content, locale, hide_internal=False),

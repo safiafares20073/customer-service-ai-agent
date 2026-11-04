@@ -9,8 +9,9 @@ audit logging, cost tracking and a bilingual Streamlit interface.
 The owner reports a working Railway deployment with Google OIDC and real OpenAI
 chat. This workspace cannot independently access its health endpoint (proxy CONNECT
 403). The final changes below are offline-tested preparation for review, not an
-automatic deployment. **Hosted ticket confirmation and the updated UI still need
-verification on the reviewed deployed commit before final submission.**
+automatic deployment. **The owner reports hosted ticket confirmation now works. The latest dark-theme,
+assistant RTL and optional email invitation changes still need review and hosted
+acceptance before final submission.**
 
 ## Architecture and tools
 
@@ -63,11 +64,13 @@ to the already configured live service.
 
 ## Assessor access and walkthrough
 
-An administrator must privately approve the professor's own Google account through
-Google Test Users when applicable and the exact verified issuer/subject allowlist.
-Email alone does not authorize application access. If the Google subject is unknown,
-access setup remains a manual prerequisite; do not invent it or request tokens,
-passwords or OAuth codes in chat. No shared account or anonymous paid chat exists.
+An administrator can privately preapprove the professor's exact primary Google
+email in HOSTED_REVIEWER_EMAILS_JSON and add it to Google Test Users if required.
+Native cryptographically validated Google OIDC plus email_verified=true permits
+first enrollment; subsequent authorization uses an immutable issuer/subject
+principal binding. Existing HOSTED_REVIEWERS_JSON users continue unchanged.
+No manual subject, tokens, passwords or new registration portal are needed.
+See [private setup and migration](docs/PROFESSOR_ACCESS_AND_DARK_RTL.md).
 
 Follow [FINAL_DEMO_GUIDE.md](docs/FINAL_DEMO_GUIDE.md) for administrator steps and a
 five-task walkthrough covering catalog/stock/policies, Arabic, cancel, edit/confirm
@@ -161,3 +164,19 @@ failure is not conclusively attributed to either case without live records.
 Actual hosted ticket confirmation, post-review deployment, professor access and
 browser/provider acceptance remain required. No paid calls, live configuration
 changes, deployment or merge occurred in this final improvement workflow.
+
+
+## Latest targeted correction
+
+The native dark appearance from pre-polish revision a9bae01 is restored; the
+navy/teal/light overrides are removed. Only a minimal native primary-label contrast
+correction remains. Assistant Markdown has per-message direction, with actual
+Arabic paragraphs/lists/markers RTL and English messages LTR, even on an Arabic
+page. Safe formatting, redaction and all ticket/permission/spending behavior remain.
+
+Optional private Google-email enrollment is additive and disabled when unconfigured.
+Its versioned extension stores keyed invitation hashes and stable opaque principals,
+without resetting existing sessions, data or accounting. Existing model, pricing,
+limits, USD 3 authorization, original traces and cost analysis are unchanged.
+See PROFESSOR_ACCESS_AND_DARK_RTL.md in docs for current exact checks and release gates;
+earlier final-polish visual/test results above are historical.
