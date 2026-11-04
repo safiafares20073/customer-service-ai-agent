@@ -180,3 +180,11 @@ without resetting existing sessions, data or accounting. Existing model, pricing
 limits, USD 3 authorization, original traces and cost analysis are unchanged.
 See PROFESSOR_ACCESS_AND_DARK_RTL.md in docs for current exact checks and release gates;
 earlier final-polish visual/test results above are historical.
+
+New conversations offer three localized suggested questions for products, returns,
+and support. Selecting one submits immediately through the same trusted chat path
+as typed input. Suggestions disappear after use and are disabled while busy,
+awaiting ticket review, or unavailable. Ticket suggestions still require explicit
+confirmation; authentication, rate limits, spending controls and the native dark
+theme are unchanged. This source update requires a separate deployment to appear
+in the hosted demo.
