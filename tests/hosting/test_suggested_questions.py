@@ -83,7 +83,11 @@ def suggested_app(hosted_store, enabled, login, claims, monkeypatch):
                     ]
                 )
             ]
-        batches = [actions, [completion("The confirmed support ticket was created.")]]
+        batches = (
+            [actions, [completion("The confirmed support ticket was created.")]]
+            if kind == "ticket"
+            else [actions, actions]
+        )
 
         def factory():
             script = SDKScript(batches.pop(0))
@@ -128,7 +132,8 @@ def test_localized_button_submits_exact_question_once_through_real_hosted_path(
     assert calls == [(question, "suggested-initial-id", locale)]
     assert controller.messages[0] == ("user", question)
     assert app.session_state["_submission_id"] != "suggested-initial-id"
-    assert not buttons(app) and scripts
+    assert len(buttons(app)) == 3 and scripts
+    assert all(b.disabled for b in buttons(app)) == (kind == "ticket")
     app.run()
     app.run()
     assert len(calls) == 1 and len(scripts) == 1
@@ -148,7 +153,8 @@ def test_localized_button_submits_exact_question_once_through_real_hosted_path(
         assert pending and app.chat_input[0].disabled
         # Suggested ticket is only a proposal, never a consent shortcut.
         app.button(key="confirm_ticket").click().run()
-        assert not app.exception and len(scripts) == 2 and not buttons(app)
+        assert not app.exception and len(scripts) == 2
+        assert len(buttons(app)) == 3 and all(not b.disabled for b in buttons(app))
         with hosted_store.db.connect() as c:
             assert c.execute("SELECT count(*) FROM tickets").fetchone()[0] == 1
             assert (
@@ -158,6 +164,26 @@ def test_localized_button_submits_exact_question_once_through_real_hosted_path(
                 ).fetchone()[0]
                 == 1
             )
+
+
+@pytest.mark.parametrize("locale", ["en", "ar"])
+def test_suggestions_stay_visible_and_can_be_reused_after_response(
+    suggested_app, hosted_store, locale
+):
+    app, controller, scripts, calls = suggested_app("products")
+    if locale == "ar":
+        app.radio[0].set_value("العربية").run()
+    app.button(key="suggestion_products").click().run()
+    assert not app.exception and len(calls) == 1
+    assert len(buttons(app)) == 3 and all(not b.disabled for b in buttons(app))
+    # A deliberate later click is a separate task, with a fresh submission ID.
+    app.button(key="suggestion_products").click().run()
+    assert not app.exception and len(calls) == 2 and len(scripts) == 2
+    assert calls[0][0] == calls[1][0] == QUESTIONS[locale][0][2]
+    assert calls[0][1] != calls[1][1]
+    assert len(buttons(app)) == 3 and all(not b.disabled for b in buttons(app))
+    with hosted_store.db.connect() as c:
+        assert c.execute("SELECT count(*) FROM tasks").fetchone()[0] == 2
 
 
 def test_multiple_queued_buttons_produce_only_one_submission(suggested_app, hosted_store):
