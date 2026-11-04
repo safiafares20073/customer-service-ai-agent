@@ -272,7 +272,7 @@ spend records, and stop safely rather than silently upgrading when full.
 ```sh
 uv sync --frozen
 docker build -t customer-service-railway:review .
-# Managed cloud CA only if required: add the documented BuildKit proxy_ca secret.
+# Standard build: no secret mounts or session-specific certificate override.
 container_id=$(docker create customer-service-railway:review)
 docker cp "$container_id:/usr/local/bin/caddy" /tmp/hosting-caddy
 docker rm "$container_id"
@@ -371,3 +371,46 @@ Those were probe/setup defects; production code and prior tests were not changed
 to make them pass. Original failure records, unique reports, fixture databases and
 stopped local containers/volumes remain private. Only the original reviewed three
 JSONL files remain official submission traces.
+
+
+## Dockerfile compatibility correction — November 4, 2026
+
+The supplied actual Railway build failed during Dockerfile validation:
+
+> dockerfile invalid: flag '--mount=type=secret,id=proxy_ca' is missing a
+> type=cache argument (other mount types are not supported)
+
+The original lines 8, 12 and 18 used optional BuildKit secret mounts for a managed
+cloud proxy CA. Railway rejects the mount syntax before executing RUN, regardless
+of whether the optional file exists. The correction removes all three secret
+mounts and their conditional PIP_CERT/SSL_CERT_FILE exports. Each RUN now executes
+its original pip/uv command directly, with normal verified HTTPS trust. No custom
+certificate, credential, insecure/trusted-host option or TLS-disable flag is added.
+
+The uv version, frozen sync commands, Python requirements/lockfile, Caddy copy,
+nonroot startup and ENTRYPOINT remain unchanged. Application code, native Railway
+configuration, authentication, storage, consent and spending controls are untouched.
+Rebuild the reviewed commit using the ordinary docker build command above; actual
+Railway rebuild/deployment requires separate approval and is not performed here.
+
+Verification of this correction: 258 Python tests passed, 0 failed/skipped, with
+one existing Authlib deprecation warning (101.64 seconds). Four offline native
+Railway configuration checks passed; configuration itself is unchanged. Ruff,
+Python dependency compatibility (63 installed packages), frozen uv lock (66
+resolved), source/wheel builds, whitespace and sensitive-file reviews passed.
+Standard docker build --check completed with no warnings, and the Dockerfile
+contains no RUN mount flags or custom CA/TLS-disable settings.
+
+The attempted ordinary docker build did **not** finish: the managed cloud's
+intercepting HTTPS proxy certificate is not trusted inside the stock Python
+image. Pip stopped at uv installation with SSLCertVerificationError / self-signed
+certificate in certificate chain. The build reached RUN, so this is separate
+from the supplied Railway parser error; it is not a successful image build.
+The failed log remains private in artifacts/railway-build-fix/docker-build.log.
+TLS verification was left enabled; no certificates, secrets, base-image tags or
+application code were altered to manufacture a pass. A full build of the exact
+Dockerfile on a builder whose HTTPS route is trusted by the stock system remains
+required. The user subsequently explicitly approved publication of this narrowly
+scoped correction with the environment-specific full-build limitation documented;
+that approval does not establish a successful image build or authorize deployment.
+No deployment, paid API request or merge occurred.
