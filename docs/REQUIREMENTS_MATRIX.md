@@ -1,5 +1,17 @@
 # Requirements matrix
 
+## Current final review candidate — November 4, 2026
+
+The owner reports a deployed Railway service, Google OIDC and real OpenAI chat at
+https://yemen-customer-service-review-production.up.railway.app. Public health
+access is blocked here by proxy CONNECT 403, so current hosted behavior is not
+independently verified. Existing approved global USD 3, private data, credentials,
+allowlist and deployment were not inspected or modified. Final code remains a
+review candidate; use [FINAL_VALIDATION.md](FINAL_VALIDATION.md) and
+[FINAL_DEMO_GUIDE.md](FINAL_DEMO_GUIDE.md) for exact evidence and pending acceptance.
+Historical planned/unverified statements below describe their original phases.
+
+
 ## Recorded cost analysis complete — 2026-11-04
 
 [cost_analysis.md](../cost_analysis.md) independently recomputes all six usage
@@ -380,3 +392,26 @@ actually deploying and supplying assessor access.
 Railway preference supersedes the historical Render selection above. No Free
 uptime, zero total cost, provider billing verification, current account access,
 real authentication exchange or deployment is inferred from local fixture tests.
+
+
+## Final academic and quality review
+
+| Requirement | Current evidence / verification boundary |
+| --- | --- |
+| Six-element, one-page specification | agent_spec.md preserves goal, seven allowed tools, max_turns/budget/final_answer/time termination, USD 0.05, ask_on_write and three examples. A4/11 pt/15 mm print profile verified as one page; viewer-dependent pagination is not guaranteed. |
+| One agent, five functional inputs and MCP | Existing functional scenario tests and real stdio discovery/calls retained; 25 focused final cases add hosted ticket/format/rate/error and factual-source coverage. Scripted SDK tests are not live-model executions. |
+| SQLite memory, permissions, audits and cost | Cross-process persistence/scoping, ownership/consent, real MCP and durable accounting tests retained; existing live database/ledger never changed. |
+| Three hostile inputs | Existing product-content, forged-consent and poisoned-memory fixture attacks rerun unchanged; not a claim of universal live-model resistance. |
+| Ticket failure | Reproduced prose-without-form and rate/invalid-argument failures offline; clarified draft-tool instructions, localized rate refusal and retained exact trusted confirmation/idempotence. No conclusive attribution or hosted fix claim without private outcomes and approved retest. |
+| Prices/availability/policies | Real MCP samples confirm P-100 USD 25 in_stock, P-200 USD 40 in_stock, P-300 USD 15 out_of_stock, 14-day original-receipt returns and unknown-product refusal; stricter prompting is not a deterministic hallucination proof. |
+| Streamlit Markdown and RTL | Filtered assistant Markdown/plain user text; local real Chromium desktop/mobile-emulation checks show bold, actual RTL root/fields, safe focus/contrast, responsive ticket controls and no horizontal overflow. Actual hosted browser/device checks pending. |
+| Authentication and professor access | Existing invite-only Google OIDC preserved; operator instructions cover Google Test Users and exact validated issuer/subject. Unknown professor subject is a manual prerequisite, never fabricated. |
+| Deployment and URL | Owner-reported deployed URL now documented. Workspace health attempt blocked; no new deployment or fresh full-image build success is claimed. |
+| Public repository | GitHub HTML returned 200 with Public label on November 4; final review branch publication is separate from LMS submission or an external-network access guarantee. |
+| Traces and cost analysis | All three original hashes/bytes and cost_analysis.md unchanged. n=3/six requests, recorded usage estimates, historical pricing and invoice limits preserved. |
+| Final readiness | GO for independent PR review after final automated checks; NO-GO for an unconditional final submission until reviewed-commit hosted ticket, professor access and hosted acceptance are complete. |
+
+Exact final commands/counts and any retained initial failures are in
+FINAL_VALIDATION.md. No security test is removed; rendering collectors adapt to
+Markdown and the timing fixture adds explicit cancellation checks without changing
+production limits. No paid calls, secret changes, live records, deployment or merge.

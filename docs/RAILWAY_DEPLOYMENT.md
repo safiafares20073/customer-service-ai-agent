@@ -1,5 +1,11 @@
 # Railway Free deployment preparation: invitation-only live OpenAI chat
 
+Current owner update (November 4): the service is deployed with Google OIDC/live
+chat. See [FINAL_DEMO_GUIDE.md](FINAL_DEMO_GUIDE.md) and
+[FINAL_VALIDATION.md](FINAL_VALIDATION.md). The preparation steps below are retained
+for reproducibility, not instructions to reset the existing USD 3 authorization,
+allowlist or persistent volume. Final polish was not deployed automatically.
+
 Prepared November 4, 2026 (Asia/Aden), from merged main
 `cedc24cc800b83fb60c9a9a4f6ad89d3a0090e80`. **Verdict: CONDITIONAL** for a bounded
 review window, subject to the resource results and account checks below.

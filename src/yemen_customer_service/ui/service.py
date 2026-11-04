@@ -19,7 +19,7 @@ from yemen_customer_service.agent.tracing import safe_text
 from yemen_customer_service.storage.database import Database
 from yemen_customer_service.storage.store import Store
 from yemen_customer_service.tool_server.client import connect
-from yemen_customer_service.tool_server.models import SafeError, TicketDraft
+from yemen_customer_service.tool_server.models import SafeError, TaskRateLimit, TicketDraft
 from yemen_customer_service.ui.presentation import COPY, customer_text, outcome_message
 
 
@@ -156,6 +156,9 @@ class Controller:
             token = self._new_token()
             result = asyncio.run(self._operate(token, request=request))
             self._accept(token, result, locale)
+        except TaskRateLimit:
+            self.status = "rate_limited"
+            self.messages.append(("assistant", COPY[locale]["retry_later"]))
         except Exception:
             self.status = "error"
             self.messages.append(("assistant", COPY[locale]["error"]))

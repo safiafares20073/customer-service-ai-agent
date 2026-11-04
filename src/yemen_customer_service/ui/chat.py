@@ -4,7 +4,7 @@ import uuid
 
 import streamlit as st
 
-from yemen_customer_service.ui.presentation import COPY, customer_text
+from yemen_customer_service.ui.presentation import COPY, assistant_markdown, customer_text
 
 
 def render_header():
@@ -16,17 +16,53 @@ def render_header():
     rtl = locale == "ar"
     # Constant trusted CSS only. Never interpolate messages, drafts, or model HTML.
     st.html("""<style>
+    .stApp {background:#f8fafc;color:#0f172a;color-scheme:light;}
+    .block-container,[data-testid="stMainBlockContainer"] {max-width:56rem;padding-top:2rem;}
     section.main, [data-testid="stMain"] {max-width: 100%;}
-    [data-testid="stChatMessage"] {border-radius: 12px;}
+    h1,h2,h3,label,[data-testid="stMarkdownContainer"] {color:#0f172a;}
+    [data-testid="stChatMessage"] {border-radius:14px;background:#fff;
+        border:1px solid #dbe4ec;padding:1.1rem;margin-block:.65rem;min-width:0;}
+    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"])
+        {background:#ecfdf5;border-inline-start:3px solid #0f766e;}
+    [data-testid="stChatMessageAvatarAssistant"] {background:#0f172a;color:#fff;}
+    [data-testid="stChatMessageAvatarUser"] {background:#0f766e;color:#fff;}
+    [data-testid="stChatMessageContent"] {min-width:0;overflow-wrap:anywhere;line-height:1.65;}
+    [data-testid="stMarkdownContainer"] p {line-height:1.65;}
+    [data-testid="stChatInput"] textarea,textarea,input
+        {font-size:1rem;background:#fff;color:#0f172a;}
+    textarea::placeholder,input::placeholder {color:#475569;opacity:1;}
+    [data-testid="stChatInput"]:focus-within {border-color:#0f766e;}
+    button[kind="primary"] {background:#0f766e;color:#fff;border-color:#0f766e;}
+    button[kind="primary"] [data-testid="stMarkdownContainer"],
+    button[kind="primary"] p {color:#fff;}
+    button:focus-visible,input:focus-visible,textarea:focus-visible
+        {outline:3px solid #0f766e;outline-offset:3px;}
+    [data-testid="stMarkdownContainer"] code
+        {direction:ltr;unicode-bidi:isolate;display:inline-block;max-width:100%;}
+    @media(max-width:640px) {
+      .block-container,[data-testid="stMainBlockContainer"] {padding:1rem .85rem 6rem;}
+      [data-testid="stChatMessage"] {padding:.8rem;gap:.65rem;}
+    }
     </style>""")
     if rtl:
         st.html("""<style id="customer-direction">
-        [data-testid="stMain"] {direction:rtl;text-align:right;}
-        textarea, input {direction:rtl;text-align:right;}</style>""")
+        .stApp {direction:rtl!important;}
+        .stApp, [data-testid="stMain"], [data-testid="stChatMessage"],
+        [data-testid="stChatInput"], [data-testid="stHorizontalBlock"],
+        [data-testid="stAlert"], label {direction:rtl;text-align:right;}
+        [data-testid="stMarkdownContainer"] {direction:rtl;text-align:right;}
+        [data-testid="stChatInput"] textarea,textarea,input {direction:rtl;text-align:right;}
+        [data-testid="stMarkdownContainer"] li {text-align:right;}
+        </style>""")
     else:
         st.html("""<style id="customer-direction">
-        [data-testid="stMain"] {direction:ltr;text-align:left;}
-        textarea, input {direction:ltr;text-align:left;}</style>""")
+        .stApp {direction:ltr!important;}
+        .stApp, [data-testid="stMain"], [data-testid="stChatMessage"],
+        [data-testid="stChatInput"], [data-testid="stHorizontalBlock"],
+        [data-testid="stAlert"], label {direction:ltr;text-align:left;}
+        [data-testid="stMarkdownContainer"] {direction:ltr;text-align:left;}
+        [data-testid="stChatInput"] textarea,textarea,input {direction:ltr;text-align:left;}
+        </style>""")
     st.title(t["title"])
     st.caption(t["subtitle"])
     st.info(t["disclosure"])
@@ -38,10 +74,17 @@ def render_chat(controller, locale, *, enabled=True):
     rtl = locale == "ar"
     for role, content in controller.messages:
         with st.chat_message(role):
-            st.text(
-                customer_text(content, locale, hide_internal=role != "user"),
-                text_alignment="right" if rtl else "left",
-            )
+            if role == "assistant":
+                st.markdown(
+                    assistant_markdown(content, locale),
+                    unsafe_allow_html=False,
+                    text_alignment="right" if rtl else "left",
+                )
+            else:
+                st.text(
+                    customer_text(content, locale, hide_internal=False),
+                    text_alignment="right" if rtl else "left",
+                )
     if not controller.messages:
         with st.chat_message("assistant"):
             st.text(t["greeting"], text_alignment="right" if rtl else "left")

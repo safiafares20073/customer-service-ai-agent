@@ -169,8 +169,15 @@ async def test_cumulative_active_timeout_stops_pending_provider_and_records_unkn
     sdk_script,
     tmp_path,
 ):
+    cancelled = False
+
     async def slow_provider(_):
-        await asyncio.sleep(1)
+        nonlocal cancelled
+        try:
+            await asyncio.sleep(2)
+        except asyncio.CancelledError:
+            cancelled = True
+            raise
         return completion("Late answer")
 
     script = sdk_script([slow_provider])
@@ -181,10 +188,13 @@ async def test_cumulative_active_timeout_stops_pending_provider_and_records_unkn
         script.provider,
         pricing,
         tmp_path,
-        limits=Limits(active_seconds=0.1),
+        # Cold SDK serialization can exceed 100 ms before dispatch. Leave setup
+        # headroom while still timing out a real in-flight fixture request.
+        limits=Limits(active_seconds=1),
     )
     assert outcome.status == "time_limit" and len(script.requests) == 1
-    assert not outcome.cost_known and outcome.active_seconds >= 0.1
+    assert not outcome.cost_known and 1 <= outcome.active_seconds < 2
+    assert cancelled
 
 
 async def test_resume_does_not_reset_elapsed_allowance(

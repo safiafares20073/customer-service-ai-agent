@@ -78,9 +78,16 @@ class TrustedClient:
                 key for key in schema.get("required", []) if key not in PRIVATE_FIELDS
             ]
             # Expose only safe inputs, not wire output schemas containing references.
-            tools.append(
-                {"name": tool.name, "description": tool.description, "inputSchema": schema}
-            )
+            description = tool.description
+            if tool.name == "create_support_ticket":
+                description = (
+                    "Propose an editable support-ticket draft now; trusted code pauses BEFORE "
+                    "execution and asks the user to Confirm or Cancel in the UI. Call this when "
+                    "a ticket is requested, before asking for confirmation in conversation. "
+                    "Do not claim a ticket exists until a successful MCP result. Use a short "
+                    "alphanumeric/hyphen idempotency_key; omit order_id or use null if unknown."
+                )
+            tools.append({"name": tool.name, "description": description, "inputSchema": schema})
         return tools
 
     def confirm_ticket(self, draft: TicketDraft, *, confirmed: bool) -> None:

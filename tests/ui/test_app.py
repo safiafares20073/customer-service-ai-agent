@@ -11,6 +11,7 @@ def visible_text(app):
             "warning",
             "error",
             "text",
+            "markdown",  # Assistant rendering changed; retain every content assertion.
             "subheader",
         )
         for e in getattr(app, kind)
