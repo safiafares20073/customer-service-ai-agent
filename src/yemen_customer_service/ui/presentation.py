@@ -33,6 +33,7 @@ COPY = {
         "error": "We could not complete this request. Please contact support before trying again.",
         "invalid": "Please check the subject, message and optional order ID.",
         "greeting": "Welcome! Ask about headphones, returns, or your own order.",
+        "suggested": "Suggested questions",
         "fallback": "Please contact support for help with this request.",
         "retry_later": "Please wait before sending another request. You can still review or "
         "cancel an existing ticket draft. Contact support if you need help.",
@@ -61,10 +62,32 @@ COPY = {
         "error": "تعذر إكمال الطلب. يرجى التواصل مع الدعم قبل المحاولة مجددًا.",
         "invalid": "يرجى مراجعة الموضوع والرسالة ورقم الطلب الاختياري.",
         "greeting": "مرحبًا! اسأل عن السماعات أو الإرجاع أو طلبك الخاص.",
+        "suggested": "أسئلة مقترحة",
         "fallback": "يرجى التواصل مع الدعم للمساعدة في هذا الطلب.",
         "retry_later": "يرجى الانتظار قبل إرسال طلب آخر. يمكنك مراجعة مسودة التذكرة الحالية "
         "أو إلغاؤها. تواصل مع الدعم إذا احتجت إلى مساعدة.",
     },
+}
+
+SUGGESTIONS = {
+    "en": (
+        (
+            "products",
+            "Products & prices",
+            "What products are currently in stock? Include their prices.",
+        ),
+        ("returns", "Return policy", "What is your return policy?"),
+        (
+            "ticket",
+            "Create support ticket",
+            "Create a support ticket for headphones that stopped working.",
+        ),
+    ),
+    "ar": (
+        ("products", "المنتجات والأسعار", "ما المنتجات المتوفرة حاليًا وما أسعارها؟"),
+        ("returns", "سياسة الإرجاع", "ما سياسة الإرجاع؟"),
+        ("ticket", "إنشاء تذكرة دعم", "أريد إنشاء تذكرة دعم لأن السماعات توقفت عن العمل."),
+    ),
 }
 
 INTERNAL = re.compile(

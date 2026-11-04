@@ -6,10 +6,34 @@ import streamlit as st
 
 from yemen_customer_service.ui.presentation import (
     COPY,
+    SUGGESTIONS,
     assistant_markdown,
     customer_text,
     message_direction,
 )
+
+
+def _submit_question(controller, question, locale):
+    """The same trusted submission and ID lifecycle for typed and suggested input."""
+    with st.spinner(COPY[locale]["working"]):
+        controller.submit(question, st.session_state._submission_id, locale)
+    st.session_state._submission_id = uuid.uuid4().hex
+
+
+def _submit_suggestion(controller, question, locale, *, enabled):
+    if (
+        not enabled
+        or controller.busy
+        or controller.draft is not None
+        or any(role == "user" for role, _ in controller.messages)
+        or st.session_state.get("_suggestion_used", False)
+    ):
+        return False
+    # Claim before any work, even if the backend declines without adding a message.
+    # A queued click from another button/rerun cannot consume another submission ID.
+    st.session_state._suggestion_used = True
+    _submit_question(controller, question, locale)
+    return True
 
 
 def render_header():
@@ -85,6 +109,19 @@ def render_chat(controller, locale, *, enabled=True):
         with st.chat_message("assistant"):
             st.text(t["greeting"], text_alignment="right" if rtl else "left")
 
+    if not any(role == "user" for role, _ in controller.messages) and not st.session_state.get(
+        "_suggestion_used", False
+    ):
+        st.caption(t["suggested"])
+        for column, (key, label, question) in zip(st.columns(3), SUGGESTIONS[locale], strict=True):
+            if column.button(
+                label,
+                key=f"suggestion_{key}",
+                disabled=not enabled or controller.busy or controller.draft is not None,
+                width="stretch",
+            ) and _submit_suggestion(controller, question, locale, enabled=enabled):
+                st.rerun()
+
     if controller.error:
         st.warning(controller.error)
 
@@ -141,9 +178,7 @@ def render_chat(controller, locale, *, enabled=True):
         disabled=not enabled or controller.busy or draft is not None,
     )
     if request:
-        with st.spinner(t["working"]):
-            controller.submit(request, st.session_state._submission_id, locale)
-        st.session_state._submission_id = uuid.uuid4().hex
+        _submit_question(controller, request, locale)
         st.rerun()
     if draft is None and not controller.error:
         if controller.status == "ready":
