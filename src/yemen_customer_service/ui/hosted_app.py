@@ -7,7 +7,7 @@ import streamlit as st
 
 from yemen_customer_service.hosting.auth import authorize_native_user
 from yemen_customer_service.hosting.controller import HostedController
-from yemen_customer_service.hosting.settings import Settings
+from yemen_customer_service.hosting.settings import GOOGLE_ISSUER, Settings
 from yemen_customer_service.hosting.store import HostedStore
 from yemen_customer_service.storage.database import Database
 from yemen_customer_service.ui.chat import render_chat, render_header
@@ -39,7 +39,10 @@ except Exception:
 if not st.user.get("is_logged_in", False):
     # No database, controller or provider is constructed for an anonymous visitor.
     st.info("الدخول للمراجعين المدعوين فقط." if ar else "Access is for invited reviewers only.")
-    if st.button("تسجيل الدخول" if ar else "Sign in", key="hosted_login"):
+    label = "تسجيل الدخول" if ar else "Sign in"
+    if settings.issuer == GOOGLE_ISSUER:
+        label = "تسجيل الدخول باستخدام Google" if ar else "Sign in with Google"
+    if st.button(label, key="hosted_login"):
         st.login("reviewer")
     st.stop()
 
@@ -50,13 +53,13 @@ if st.button("تسجيل الخروج" if ar else "Sign out", key="hosted_logout
         safe_stop()
 
 try:
-    login = authorize_native_user(st.user.to_dict(), settings, time.time())
+    store = HostedStore(Database(settings.data_dir / "customer_service.sqlite3"))
+    login = authorize_native_user(st.user.to_dict(), settings, time.time(), store=store)
     previous = st.session_state.get("_controller")
     if previous and previous.login != login:
         previous.logout()
         st.session_state.clear()
     if "_controller" not in st.session_state:
-        store = HostedStore(Database(settings.data_dir / "customer_service.sqlite3"))
         st.session_state._controller = HostedController(store, login, settings)
         st.session_state._submission_id = uuid.uuid4().hex
     controller = st.session_state._controller

@@ -17,15 +17,18 @@ class Login:
     expires: float
 
 
-def authorize_native_user(claims: dict, settings: Settings, now: float) -> Login:
+def authorize_native_user(claims: dict, settings: Settings, now: float, *, store=None) -> Login:
     # This function consumes st.user, never request headers, widgets or model text.
     # Cryptographic signature/state/nonce validation belongs to native OIDC/Authlib.
     if claims.get("is_logged_in") is not True or claims.get("iss") != settings.issuer:
         raise SafeError("ACCESS_DENIED")
     subject, nonce = claims.get("sub"), claims.get("nonce")
-    if not isinstance(subject, str) or not isinstance(nonce, str) or not 1 <= len(nonce) <= 512:
-        raise SafeError("ACCESS_DENIED")
-    if (settings.issuer, subject) not in settings.invites:
+    if (
+        not isinstance(subject, str)
+        or not 1 <= len(subject) <= 256
+        or not isinstance(nonce, str)
+        or not 1 <= len(nonce) <= 512
+    ):
         raise SafeError("ACCESS_DENIED")
     audience = claims.get("aud")
     if claims.get("azp", settings.client_id) != settings.client_id:
@@ -52,4 +55,11 @@ def authorize_native_user(claims: dict, settings: Settings, now: float) -> Login
         separators=(",", ":"),
     ).encode()
     fingerprint = hmac.new(settings.principal_secret.encode(), raw, hashlib.sha256).hexdigest()
-    return Login(settings.principal(settings.issuer, subject), fingerprint, end)
+    login = Login(settings.principal(settings.issuer, subject), fingerprint, end)
+    if (settings.issuer, subject) not in settings.invites:
+        if store is None:
+            raise SafeError("ACCESS_DENIED")
+        from yemen_customer_service.hosting import invitations
+
+        invitations.authorize(store, login, settings, claims)
+    return login

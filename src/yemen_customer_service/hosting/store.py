@@ -3,6 +3,7 @@
 import secrets
 import uuid
 
+from yemen_customer_service.hosting import invitations
 from yemen_customer_service.hosting.auth import Login
 from yemen_customer_service.storage.database import Database
 from yemen_customer_service.storage.store import Store, digest
@@ -61,6 +62,7 @@ class HostedStore(Store):
                 "SELECT 1 FROM customers WHERE customer_id IN ('demo-a','demo-b')"
             ).fetchone():
                 raise ValueError("Development identities are forbidden")
+            invitations.initialize(c)
             Database.seed_catalog(c)
 
     def configure(self, settings):
@@ -72,6 +74,7 @@ class HostedStore(Store):
                     "DO UPDATE SET enabled=1",
                     (principal,),
                 )
+            invitations.configure(c, settings)
             c.execute(
                 "UPDATE hosted_control SET paid=?,approval_until=?,global_budget=?,"
                 "principal_budget=? WHERE id=1",

@@ -33,6 +33,7 @@ export default defineRailway(() => {
       HOSTED_PRINCIPAL_BUDGET_USD: "0",
       HOSTED_APPROVAL_UNTIL: "0",
       HOSTED_REVIEWERS_JSON: preserve(),
+      HOSTED_REVIEWER_EMAILS_JSON: preserve(),
       HOSTED_ORIGIN: preserve(),
       OIDC_ISSUER: preserve(),
       OIDC_METADATA_URL: preserve(),

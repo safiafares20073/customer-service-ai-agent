@@ -37,6 +37,7 @@ def main() -> None:
         "streamlit",
         "run",
         str(app),
+        "--theme.base=dark",
         "--server.address=127.0.0.1",
         f"--server.port={args.port}",
         "--server.headless=true",
