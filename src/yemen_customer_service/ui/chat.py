@@ -25,7 +25,6 @@ def _submit_suggestion(controller, question, locale, *, enabled):
         not enabled
         or controller.busy
         or controller.draft is not None
-        or any(role == "user" for role, _ in controller.messages)
         or st.session_state.get("_suggestion_used", False)
     ):
         return False
@@ -109,19 +108,6 @@ def render_chat(controller, locale, *, enabled=True):
         with st.chat_message("assistant"):
             st.text(t["greeting"], text_alignment="right" if rtl else "left")
 
-    if not any(role == "user" for role, _ in controller.messages) and not st.session_state.get(
-        "_suggestion_used", False
-    ):
-        st.caption(t["suggested"])
-        for column, (key, label, question) in zip(st.columns(3), SUGGESTIONS[locale], strict=True):
-            if column.button(
-                label,
-                key=f"suggestion_{key}",
-                disabled=not enabled or controller.busy or controller.draft is not None,
-                width="stretch",
-            ) and _submit_suggestion(controller, question, locale, enabled=enabled):
-                st.rerun()
-
     if controller.error:
         st.warning(controller.error)
 
@@ -170,6 +156,19 @@ def render_chat(controller, locale, *, enabled=True):
             with st.spinner(t["working"]):
                 controller.decide(confirm=False, revision=controller.revision, locale=locale)
             st.rerun()
+
+    # Suggestions stay available near the input throughout the conversation.
+    # A click is claimed until a clean rerender, blocking queued second clicks.
+    st.caption(t["suggested"])
+    for column, (key, label, question) in zip(st.columns(3), SUGGESTIONS[locale], strict=True):
+        if column.button(
+            label,
+            key=f"suggestion_{key}",
+            disabled=not enabled or controller.busy or controller.draft is not None,
+            width="stretch",
+        ) and _submit_suggestion(controller, question, locale, enabled=enabled):
+            st.rerun()
+    st.session_state["_suggestion_used"] = False
 
     request = st.chat_input(
         t["chat"],
