@@ -28,7 +28,7 @@ def hosted_ui(hosted_settings, monkeypatch):
 def text(app):
     return "\n".join(
         str(e.value)
-        for kind in ["title", "caption", "info", "warning", "error", "text"]
+        for kind in ["title", "caption", "info", "warning", "error", "text", "markdown"]
         for e in getattr(app, kind)
     )
 

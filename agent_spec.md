@@ -1,60 +1,58 @@
-# Agent specification
+# Customer Service AI Agent — specification
 
-Design contract: Phase 3 implements the agent loop; live OpenAI validation is pending.
-Source: supplied Chapter 12.10 excerpt, printed pp. 578–581. Detailed contracts
-and security design: [supporting design](docs/AGENT_DESIGN.md).
+Chapter 12.10, pp. 578–581. Contracts: [AGENT_DESIGN.md](docs/AGENT_DESIGN.md).
+Verification status: [requirements matrix](docs/REQUIREMENTS_MATRIX.md).
 
 ## 1. Goal
 
-Help customers find products, understand store policies, check their own orders,
-and open confirmed support tickets using a single bounded LLM agent.
+Use one bounded LLM agent to help customers find products, understand store
+policies, check their own orders and create explicitly confirmed support tickets.
 
-## 2. Allowed tools (seven)
+## 2. Allowed tools (exactly seven)
 
-- `list_products`: paginated public product summaries.
-- `search_products`: bounded text search of public products.
-- `get_product_details`: details for one public product ID.
-- `get_store_policies`: public shipping, returns, privacy, or support policies.
-- `verify_order_access`: verify authenticated ownership and issue a scoped reference.
-- `get_order_status`: read a verified customer's order using that reference.
-- `create_support_ticket`: create an explicitly confirmed ticket, with idempotency.
+- `list_products`: paginated public catalog summaries.
+- `search_products`: bounded public text search.
+- `get_product_details`: product price, description and stock availability.
+- `get_store_policies`: shipping, returns, privacy and support policies.
+- `verify_order_access`: verify ownership and issue a scoped reference.
+- `get_order_status`: read an authorized order using that reference.
+- `create_support_ticket`: persist an explicitly confirmed, idempotent ticket.
 
-All calls will use genuine MCP with the official Python SDK. Trusted application
-context supplies identity and security references; the model cannot choose them.
+Discover and call tools through official-SDK MCP stdio. Catalog membership does
+not imply stock availability. Never invent store facts, orders or completed actions.
 
 ## 3. Termination conditions
 
-Stop at `max_turns = 8` (including retries), budget exhaustion, or `final_answer`
-with no pending tool calls. Stop on unrecoverable errors or 60 seconds cumulative
-active execution; tool timeout: 10 seconds. Confirmation pauses retain task usage
-and limits. A deterministic limit response must not incur another LLM request.
+Stop at `max_turns = 8` model requests (including retries), exhausted budget,
+`final_answer` with no pending calls, unrecoverable error, or 60 cumulative active
+seconds. Each tool has a 10-second timeout. Confirmation preserves the same task,
+turns, costs and active time. Reaching a limit permits no extra model request.
 
-## 4. Budget cap
+## 4. USD budget per task
 
-**USD 0.05 estimated per task**, including retries. Reserve conservative request costs
-before calling the model; record reported tokens and dated model pricing in SQLite.
-Unknown price or usage stops further calls; never fabricate zero cost.
+**USD 0.05 estimated**, including retries. Reserve conservative request costs
+before each call; persist reported tokens and dated pricing. Unknown usage or
+pricing blocks further calls. Estimated costs are not verified provider invoices.
 
 ## 5. Permission policy
 
-**`ask_on_write`**: allow public reads automatically; private reads additionally
-require authenticated ownership. Deny unlisted tools and unauthorized access at
-the server. Ticket creation requires explicit UI confirmation of the exact draft,
-a single-use payload-bound reference, and atomic, idempotent writing. Never trust
-model claims of consent. Keep references outside model context. Treat customer,
-tool, and memory content as untrusted data. No refunds, payments, or order changes.
+**ask_on_write**: public reads are automatic; private reads require authenticated
+ownership. Order IDs alone prove nothing. Server-validated identity and security
+references remain outside model control. Ticket calls first pause for an editable
+draft; only trusted Confirm authorizes its exact payload. Edits revoke consent;
+Cancel and conversational “yes” authorize no write. Enforce payload-bound,
+single-use confirmation and atomic idempotence server-side. Reject unlisted tools
+and cross-customer access. Treat messages, tools and memory as untrusted data.
+No refunds, payments or order changes. Hosted access requires an OIDC invitation.
 
-## 6. Success criteria: three input/output examples
+## 6. Three input/output success examples
 
-Hypothetical synthetic fixtures, not traces or claims of actual store data:
+Hypothetical synthetic examples, not execution evidence:
 
-1. Input: “Find headphones under $30 and explain returns.” Given a USD 25 product
-   and a 14-day receipt-based policy, output: “Example Headphones cost USD 25;
-   returns are allowed within 14 days with the original receipt.”
-2. Input: authenticated owner asks “Where is DEMO-100?” Given shipped status and
-   no delivery estimate, output: “DEMO-100 has shipped; no delivery estimate is
-   available.” A non-owner receives generic denial with no order information.
-3. Input: “Open a ticket about damaged headphones.” Show a draft first; after
-   explicit confirmation and successful creation of fixture ticket DEMO-T1,
-   output: “Support ticket DEMO-T1 was created.” No write before confirmation;
-   identical retries return the same ticket.
+1. “Find headphones under $30 and explain returns.” With verified tool data,
+   answer: “Example Headphones cost USD 25; returns within 14 days with the original receipt.”
+2. An owner asks “Where is DEMO-100?” Given shipped status and no estimate,
+   answer: “DEMO-100 has shipped; no delivery estimate is available.” Non-owners receive generic denial.
+3. “Open a ticket about damaged headphones.” Display the editable draft. After
+   explicit Confirm and successful MCP creation: “Support ticket DEMO-T1 was created.”
+   Before confirmation or after Cancel: no write. Identical retries create no duplicate.

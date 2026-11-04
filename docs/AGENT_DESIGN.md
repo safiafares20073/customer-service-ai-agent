@@ -1,11 +1,12 @@
 # Supporting agent design and tool contracts
 
-Status: Phase 3 implements one OpenAI SDK agent over the Phase 2 storage and MCP tools.
-Phase 4 adds a locally tested bilingual Streamlit UI; live OpenAI behavior and
-production authentication/deployment remain unverified or planned.
-These details support [agent_spec.md](../agent_spec.md).
-The official six-element summary is in that one-page specification; detailed
-security mechanisms here are project design choices, not additional book requirements.
+Status: one OpenAI SDK agent, seven genuine MCP tools, persistent SQLite and a
+bilingual Streamlit UI are implemented. The owner reports Railway/Google OIDC/live
+chat; final hosted ticket and reviewed-commit validation remain pending.
+[FINAL_VALIDATION.md](FINAL_VALIDATION.md) distinguishes local fixtures/browser
+checks from hosted/provider evidence. [agent_spec.md](../agent_spec.md) is the
+one-page six-element specification; the following details are supporting contracts
+and project security choices, not extra official rubric requirements.
 
 ## 1. Goal
 
@@ -168,3 +169,19 @@ existing store data**. Later tests must supply explicit synthetic fixtures.
      damaged headphones.” Before confirmation, show only the draft.
    - Evidence required: no write before consent; genuine MCP creation after consent;
      replay with the same idempotency key yields the same ticket, not a duplicate.
+
+
+## Final ticket and grounding clarification
+
+The model-facing description of create_support_ticket describes a draft proposal:
+the existing loop queues it and pauses before MCP write execution. Only trusted
+exact-draft Confirm permits the later genuine call. A prose proposal or chat yes
+cannot register consent. Malformed model fields remain denied; no automatic write
+retry or permissive argument repair is added. The seven wire contracts are unchanged.
+
+Model instructions now require current MCP details for stock claims and policy
+tools for policy claims. Catalog summaries alone do not establish availability.
+UI assistant content uses redacted basic Markdown with external media/HTML disabled;
+user text remains plain. A typed task-start rate denial changes only the customer
+message, preserving threshold and ACCESS_DENIED semantics. No budget/auth/storage
+schema is changed by final polish.

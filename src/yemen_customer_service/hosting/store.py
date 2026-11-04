@@ -6,7 +6,7 @@ import uuid
 from yemen_customer_service.hosting.auth import Login
 from yemen_customer_service.storage.database import Database
 from yemen_customer_service.storage.store import Store, digest
-from yemen_customer_service.tool_server.models import SafeError
+from yemen_customer_service.tool_server.models import SafeError, TaskRateLimit
 
 HOSTED_SCHEMA = 1
 DDL = (
@@ -126,7 +126,7 @@ class HostedStore(Store):
                 (login.principal, self.clock() - 3600),
             ).fetchone()[0]
             if count >= tasks_per_hour:
-                raise SafeError("ACCESS_DENIED")
+                raise TaskRateLimit()
             c.execute(
                 "INSERT INTO tasks(task_id,customer_id,created_at) VALUES (?,?,?)",
                 (task, login.principal, self.clock()),

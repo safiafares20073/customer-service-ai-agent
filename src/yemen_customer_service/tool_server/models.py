@@ -94,3 +94,10 @@ class SafeError(Exception):
     def __init__(self, code: str):
         self.code = code
         super().__init__(self.MESSAGES[code])
+
+
+class TaskRateLimit(SafeError):
+    """Trusted task-start denial, distinct from ownership without changing wire codes."""
+
+    def __init__(self):
+        super().__init__("ACCESS_DENIED")

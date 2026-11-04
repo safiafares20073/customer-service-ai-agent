@@ -1,6 +1,8 @@
 # Final submission acceptance checklist
 
-Status as of 2026-11-04 (Asia/Aden). Unchecked means final acceptance is pending;
+Status as of 2026-11-04 (Asia/Aden). The owner reports Railway/Google/live chat;
+final hosted ticket and professor acceptance remain pending. See FINAL_VALIDATION.md.
+Unchecked means final acceptance is pending;
 it does not imply the existing implementation is missing. Historical fixture
 results are in the requirements matrix. This checklist introduces no new official
 requirements. Evidence must identify its commit, environment and provenance.
@@ -11,7 +13,7 @@ requirements. Evidence must identify its commit, environment and provenance.
 | --- | --- | --- |
 | [ ] Real task end-to-end, public URL, cost tracking | Goal p. 578 | Existing agent and tracker; verify actual hosted task and reachable demo |
 | [x] Select one of eight domains | Day 1 pp. 578–579 | Customer service selected |
-| [ ] One-page agent_spec.md | Day 1 p. 579 | Present; final render must fit one page and include all six elements below |
+| [x] One-page agent_spec.md | Day 1 p. 579 | All six elements retained; one A4 page at 11 pt body/15 mm margins, verified local PDF text extraction; other viewers can paginate differently |
 | [x] One-sentence goal | Day 1 p. 579 | agent_spec.md section 1 |
 | [x] 5–10 allowed tools | Day 1 p. 579 | Exactly seven named tools |
 | [x] max_turns, budget and final_answer termination | Day 1 p. 579 | Explicit limits in specification; runtime fixture coverage exists |
@@ -19,15 +21,15 @@ requirements. Evidence must identify its commit, environment and provenance.
 | [x] Permission mode | Day 1 p. 579 | ask_on_write and server-enforced private-read ownership |
 | [x] Three I/O success examples | Day 1 p. 579 | All three specified; examples are not execution evidence |
 | [ ] Basic single-agent tool loop, five inputs, JSONL | Day 2 p. 579 | Five fixture scenarios tested through MCP; one live-labeled product/policy success reviewed; full final acceptance remains pending; no multi-agent |
-| [ ] At least one MCP server | Day 3 p. 580 | Existing real official SDK stdio tests; rerun regression for final candidate |
-| [ ] SQLite memory remembers after restart | Day 3 p. 580 | Existing cross-process scoped fixture tests; rerun for final candidate |
+| [x] At least one MCP server | Day 3 p. 580 | Official SDK stdio discovery/calls and seven tool contracts exercised in retained/final tests |
+| [x] SQLite memory remembers after restart | Day 3 p. 580 | Real process restart/scoping tests retained; does not certify the current hosted disk |
 | [ ] Permission layer, audit log, cost tracker | Day 4 p. 580 | Existing tested implementation; verify hosted access/spending gates and records |
-| [ ] Three hostile prompt-injection inputs | Day 4 p. 580 | Three executed fixture attacks with real MCP passed; preserve actual outcomes and clearly state live robustness limits |
+| [x] Three hostile prompt-injection inputs | Day 4 p. 580 | Product, forged-consent and persistent-memory attacks executed with real MCP/provider fixtures; no universal live-model safety claim |
 | [ ] Simple Streamlit UI | Day 5 p. 580 | Local bilingual UI exists; offline production UI regression is recorded in SECURE_HOSTING.md; real hosted workflow review remains pending |
-| [ ] Deploy to Render or Railway | Day 5 p. 580 | Actual TLS URL, deployed commit, access checks, restart persistence and dated observations required |
+| [ ] Deploy to Render or Railway | Day 5 p. 580 | Owner reports deployed Railway/Google/live chat; final commit, access/confirmation/restart observations still required |
 | [x] README and average cost | Day 5 p. 580 | README reflects reviewed traces and n=3 recorded-usage estimated mean USD 0.000208666667/task; cost_analysis.md states rates, scope and billing limits; final hosted instructions remain pending |
-| [ ] Public GitHub repository | LMS item 1 p. 581 | Repository archive accessible during review; verify logged-out web visibility of final submission commit |
-| [ ] Live demo URL | LMS item 2 p. 581 | Public landing/login URL plus privately supplied assessor access; do not publish credentials |
+| [x] Public GitHub repository | LMS item 1 p. 581 | GitHub HTML returned HTTP 200 and Public label; final submission commit/merge still pending |
+| [ ] Live demo URL | LMS item 2 p. 581 | Owner supplies Railway URL in README; workspace health blocked by proxy; actual professor/current reviewed-commit acceptance pending |
 | [x] traces/success_1.jsonl | LMS item 3 p. 581 | Imported unchanged live-labeled success trace; report/SQLite/audits/usage cross-checked offline; billing unverified; see SUCCESS_EVIDENCE_VALIDATION.md |
 | [x] traces/near_failure_recovery.jsonl | LMS item 3 p. 581 | Reviewed live-labeled recovery trace imported byte-identically; hash, same-task sequence, tokens/cost and supplied report checked; private DB checks attributed to prior reviewer; billing unverified; see RECOVERY_EVIDENCE_VALIDATION.md |
 | [x] traces/explicit_failure.jsonl | LMS item 3 p. 581 | Reviewed live-labeled terminal turn_limit trace imported byte-identically; one read/request, usage/cost and report verified; private DB checks attributed to original reviewer; billing unverified; see EXPLICIT_FAILURE_EVIDENCE_VALIDATION.md |
@@ -141,3 +143,30 @@ network access. No paid-plan upgrade or infrastructure provisioning is authorize
 
 Original trace and measured-cost completion gates remain intact. These preparation
 checks do not complete the official deployment/live-URL deliverable.
+
+
+## Final review candidate: mandatory completion vs verified scope
+
+[FINAL_DEMO_GUIDE.md](FINAL_DEMO_GUIDE.md) provides the professor's five-task
+walkthrough and private access prerequisites. [FINAL_VALIDATION.md](FINAL_VALIDATION.md)
+records exact tests/visuals and honest remaining limitations.
+
+- [x] Local hosted-form tests cover both reported request phrasings, null/invalid
+  order handling, editing, explicit Confirm/Cancel, replay and SQLite create audit.
+- [x] Chat yes cannot authorize a write; prose alone creates no ticket/form.
+- [x] Current-source factual samples and safe Markdown/English/Arabic rendering tested.
+- [x] Real local Chromium desktop/mobile-emulation checks and one-page spec profile.
+- [x] Existing global/per-principal/per-task/rate/time/kill controls preserved;
+  owner-reported live USD 3 and all live settings/data remain untouched.
+- [ ] Independently review the PR and approve deployment of its exact commit separately.
+- [ ] Obtain professor's verified Google issuer/subject privately, Google Test User
+  access when required and approved application invitation; do not guess values.
+- [ ] Actually retest both ticket requests on the reviewed deployed commit; verify
+  form, edit/cancel/confirm, actual MCP audit and one persisted ticket privately.
+- [ ] Complete hosted Google/HTTPS/WebSocket/expiry/isolation and real browser/mobile checks.
+- [ ] Confirm allowance/expiry remains within existing approval before any hosted
+  evaluation. This development workflow authorizes no paid test or new allowance.
+- [ ] Submit the final repository/URL/spec/three unchanged traces/cost document to LMS.
+
+Recommendation: GO for independent review, NO-GO for claiming final hosted ticket
+resolution or unconditional submission readiness before these outstanding checks.

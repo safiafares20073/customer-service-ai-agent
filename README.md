@@ -1,243 +1,163 @@
 # Customer Service AI Agent
 
-LLM4Yemen Track B, Week 5 capstone.
+LLM4Yemen Track B — Week 5 capstone. One bounded OpenAI agent discovers and calls
+seven tools through the official MCP Python SDK, with SQLite memory, authorization,
+audit logging, cost tracking and a bilingual Streamlit interface.
 
-**Current status: Railway Free invite-only hosting preparation; not deployed.**
-One official OpenAI SDK agent discovers and calls seven MCP tools over genuine
-stdio, with scoped SQLite memory, permissions, cost controls and a locally tested
-Arabic/English Streamlit UI. Three reviewed execution traces are available:
-[success](traces/success_1.jsonl), [controlled recovery](traces/near_failure_recovery.jsonl)
-and [explicit failure](traces/explicit_failure.jsonl). The terminal failure remains
-`turn_limit`; fixture tests are kept separate from these live-labeled records.
+**Demo:** https://yemen-customer-service-review-production.up.railway.app
 
-[Cost analysis](cost_analysis.md): **USD 0.0006260 total**, approximately
-**USD 0.000208666667 per attempted task (n=3, including the failure)**, from six
-recorded model requests and November 3, 2026 Standard rates. This is usage-derived
-estimated cost, not independently verified provider billing. Monthly model-token
-projections and limitations are documented in that file. No paid calls were made
-for the analysis. Invite-only OIDC authentication, durable hosted spending controls
-and hosting configuration are implemented and tested offline. Railway Free is the
-preferred, conditionally compatible platform; real hosted
-login, deployment, browser/mobile visual review and final submission remain pending.
+The owner reports a working Railway deployment with Google OIDC and real OpenAI
+chat. This workspace cannot independently access its health endpoint (proxy CONNECT
+403). The final changes below are offline-tested preparation for review, not an
+automatic deployment. **Hosted ticket confirmation and the updated UI still need
+verification on the reviewed deployed commit before final submission.**
 
-The [gated evidence runner](docs/LIVE_TRACE_RUNNER.md) remains paid-disabled by
-default; further execution requires separate approval. Current setup and historical
-phase evidence follow below. No public demo URL or hosting completion is claimed.
+## Architecture and tools
 
-The application is a single LLM agent designed to answer product and policy
-questions, checks authorized orders, and creates support tickets after consent.
-It uses the official Python MCP SDK, SQLite persistence, permission checks,
-audit logs, and USD cost accounting.
+Browser -> invite-only Google OIDC -> trusted Streamlit controller -> single
+OpenAI tool-calling loop -> genuine MCP stdio subprocess -> persistent SQLite.
+Model arguments cannot establish identity, ownership or consent. MCP is private;
+there is no public database or MCP endpoint and no package named mcp in this project.
 
-Read [the agent specification](agent_spec.md),
-[implementation plan](docs/IMPLEMENTATION_PLAN.md), and
-[requirements matrix](docs/REQUIREMENTS_MATRIX.md) before implementation.
+| MCP tool | Purpose |
+| --- | --- |
+| list_products | Paginated public catalog summaries |
+| search_products | Bounded catalog text search |
+| get_product_details | Price, description and actual stock availability |
+| get_store_policies | Returns, shipping, privacy and support policies |
+| verify_order_access | Verify trusted authenticated ownership |
+| get_order_status | Read a verified own order using a private scoped reference |
+| create_support_ticket | Create an explicitly confirmed, idempotent ticket |
 
-## Project layout
-
-```text
-src/yemen_customer_service/
-  agent/          # OpenAI loop, durable state, pricing, traces, guarded console
-  evidence/       # Separately gated trace scenarios and durable plan limits
-  tool_server/    # Official SDK FastMCP server, trusted adapter, console demo
-  storage/        # SQLite migrations, synthetic fixtures, authorized operations
-  ui/             # Bilingual local demo and separate invite-only hosted UI
-  hosting/        # OIDC authorization, private startup, persistent spending gates
-tests/
-  agent/          # SDK-provider fixtures + real MCP, limits, process restart
-  unit/
-  integration/
-  security/
-docs/
-```
+The synthetic catalog contains Example Headphones (USD 25, in stock), Example
+Keyboard (USD 40, in stock), and Example Mouse (USD 15, out of stock). Returns
+require the original receipt within 14 days. These facts come from MCP data, not
+UI answer templates. List/search catalog entries do not establish stock: detail
+tools must be consulted. No real customer data is used or requested.
 
 ## Run locally
 
-From the repository root, using Python 3.12.14 and `uv` (validated with 0.12.23):
+Use Linux/WSL2, Python 3.12 and uv. POSIX process/file locks are required.
+Dependencies are pinned in uv.lock; validation versions are in the final report.
 
 ```sh
 uv sync --frozen
+# Storage + genuine MCP only; no model request:
 .venv/bin/customer-service-demo
+# Loopback-only UI with clearly labeled scripted provider fixtures:
+UI_PROVIDER=fixture APP_ENV=development .venv/bin/customer-service-ui --demo
 ```
 
-The demo seeds synthetic data, launches a genuine MCP server subprocess,
-initializes a client session, discovers the seven tools, and lists products.
-It makes no LLM or external service requests. Dependencies are locked in `uv.lock`;
-Python >=3.11 is declared, but this phase was tested on 3.12.14 only.
+Open http://127.0.0.1:8501 on the same machine. Choose English or العربية.
+Development identities and their seeded orders are local-only; never expose this
+launcher, its capabilities or development database publicly. Windows users should
+run these commands in WSL2. Commands read environment variables; .env is not loaded
+automatically. Use [.env.example](.env.example) only as an empty-credential template.
 
-For the authenticated **synthetic development** workflow:
+The hosted entrypoint is a separate Docker launcher: one Caddy proxy, private
+Streamlit worker, one mounted disk and native OIDC. See
+[Railway setup](docs/RAILWAY_DEPLOYMENT.md). No change to the existing live secrets,
+Google configuration, volume, USD 3 approved global allowance or accounting was
+made during this final task. Do not reapply new-deployment zero-budget defaults
+to the already configured live service.
 
-```sh
-.venv/bin/customer-service-demo --enable-demo-auth --customer demo-a
-```
+## Assessor access and walkthrough
 
-This shows order DEMO-100 and a synthetic ticket draft. A ticket is created only
-after typing `CONFIRM`. Customer `demo-b` owns DEMO-200. These identities are
-fixtures, not a production login system. No passwords or API keys are required.
-The SQLite file defaults to ignored `data/customer_service.sqlite3`; use
-`--database /path/to/synthetic.sqlite3` to select a separate demo file.
+An administrator must privately approve the professor's own Google account through
+Google Test Users when applicable and the exact verified issuer/subject allowlist.
+Email alone does not authorize application access. If the Google subject is unknown,
+access setup remains a manual prerequisite; do not invent it or request tokens,
+passwords or OAuth codes in chat. No shared account or anonymous paid chat exists.
 
-For a raw MCP client, start `.venv/bin/customer-service-mcp` with `DATABASE_PATH`
-set to an initialized database. Its stdout is reserved for MCP protocol messages;
-use the SDK client or the demo rather than typing human commands into it.
-An unbound server permits public reads and rejects private operations.
+Follow [FINAL_DEMO_GUIDE.md](docs/FINAL_DEMO_GUIDE.md) for administrator steps and a
+five-task walkthrough covering catalog/stock/policies, Arabic, cancel, edit/confirm
+and unauthorized order denial. Existing rate limits also apply to demonstrations;
+logging out never resets the principal's allowance.
 
-```sh
+## Permissions, memory and spending
 
-# Full suite now requires a real Caddy binary; see docs/DEPLOYMENT.md.
-CADDY_TEST_BINARY=/tmp/hosting-caddy .venv/bin/pytest -q
-.venv/bin/ruff check .
-.venv/bin/ruff format --check .
-uv pip check --python .venv/bin/python
-git diff --check
-```
+- Native OIDC plus invitation validation binds each principal. Login expires after
+  at most 15 minutes; logout revokes capabilities and pending consent. No model
+  message, chat “yes”, guessed order ID or unsigned header proves authorization.
+- A ticket request must call create_support_ticket to produce an editable draft.
+  Only the trusted Confirm control authorizes the exact payload. Edits invalidate
+  old confirmation; Cancel writes nothing and makes no additional model call.
+  Confirmation resumes the same task/counters, with server-side idempotence.
+- SQLite scopes conversations, tasks and tickets by principal. Restart tests prove
+  scoped memory and durable accounting. Production initializes public catalog
+  data only, without demo identities or preloaded orders. Protected own-order
+  success is tested locally; the public demo has no preloaded private orders.
+- Each task permits at most 8 model requests, USD 0.05 estimated, 60 cumulative
+  active seconds and 10 seconds/tool. Durable global/per-principal reservations,
+  rate limits, one-operation concurrency, approval expiry and kill remain enforced.
+  The owner-reported approved global cap is USD 3; it was not inspected, changed,
+  reset or increased here. Missing/ambiguous usage blocks further paid calls.
+- Secrets stay in host private settings. Customer views omit API accounting,
+  capabilities and debug details. Assistant Markdown supports basic formatting
+  after redaction, with HTML and external links/media disabled; user text stays plain.
 
-See [Phase 2 design, security boundaries, and actual verification](docs/PHASE_2.md).
-The tests launch real stdio MCP subprocesses; direct handler calls do not replace
-integration tests. A restricted runner must permit subprocess stdio/event-loop
-operations. Never bypass tests when the runner cannot support them.
+Production uses the official OpenAI SDK, gpt-6-luna, Chat Completions with
+reasoning_effort="none", Standard/default processing, no automatic SDK retries
+and no model fallback. Paid execution requires separate explicit authorization.
+Never place API keys in Git, Docker images, browser widgets or public documentation.
+Historical compatibility/pricing provenance is documented in the
+[compatibility audit](docs/OPENAI_COMPATIBILITY_AUDIT.md); current account/model
+support and pricing must be checked privately before future authorized use.
 
-## Phase 3 agent
+## Evidence and measured costs
 
-Safe preflight, with no API request:
+The three reviewed original files remain byte-for-byte unchanged:
 
-```sh
-.venv/bin/customer-service-agent --preflight
-```
+- [success_1.jsonl](traces/success_1.jsonl): completed product/policy task.
+- [near_failure_recovery.jsonl](traces/near_failure_recovery.jsonl): completed after
+  one disclosed harness-controlled read fault and bounded recovery in the same task.
+- [explicit_failure.jsonl](traces/explicit_failure.jsonl): terminal turn_limit,
+  deliberately limited to one model request; incomplete rather than fabricated success.
 
-The provisional model is `gpt-6-luna`, configurable through `OPENAI_MODEL`.
-Credentials come from `OPENAI_API_KEY` or `LLM_API_KEY`; never put values in source
-control or chat. Commands read process environment variables and do not load
-`.env` automatically. Pricing is model-specific, dated, and recorded in
-[config/model_pricing.json](config/model_pricing.json): the user's official
-corrected Standard excerpt dated November 3, 2026 lists USD 0.10 input, 0.50
-output, and 0.01 cached input per million tokens. Independent retrieval was blocked;
-subsequent supplied execution records have been reviewed, while provider origin,
-current account availability and billed costs remain independently unverified.
-The [compatibility audit](docs/OPENAI_COMPATIBILITY_AUDIT.md) corrected the
-previous Flex/Batch rates mislabeled as Standard and now explicitly sets
-`reasoning_effort="none"`, as required for this model’s Chat Completions function
-calling. Documented support relies on the verified source excerpt; later reviewed
-execution records are linked above and do not independently authenticate a provider
-exchange or current account access.
+[Cost analysis](cost_analysis.md) records six requests across n=3 tasks, including
+failure: 5,500 input, 152 output and 0 cached tokens; **USD 0.0006260 total**, mean
+**USD 0.000208666667/task**. At historical November 3, 2026 Standard prices, projected
+model costs for 100/1,000/10,000 tasks are USD 0.02086667/0.20866667/2.08666667.
+These are usage-derived estimates, not independently verified invoices or hosting
+prices; the sample size and workload assumptions limit extrapolation.
 
-No paid call is enabled by default. After separate explicit paid-run approval,
-secure credential setup, and live model checks, the guarded invocation is:
+## Verification and remaining limits
 
-```sh
-.venv/bin/customer-service-agent --allow-paid --enable-demo-auth --customer demo-a "Find headphones under $30"
-```
+**Final offline regression: 283 passed, 0 failed, 0 skipped**, one existing Authlib
+warning; four Railway configuration checks pass. Real local Chromium desktop/mobile
+RTL/Markdown/control checks passed. No fresh local Docker image-build pass is claimed.
 
-This command has **not** been run against OpenAI in this phase. It uses synthetic
-fixture identity only, not production authentication. Ticket requests pause for
-review of the exact draft and an explicit `CONFIRM`; declining performs no write.
-Task counters and costs survive confirmation and agent-process resumption.
-
-The agent permits at most eight SDK requests, USD 0.05 in conservative estimated
-cost, 60 cumulative active seconds, and 10 seconds per tool. SDK retries are
-disabled. Missing usage or unsupported pricing stops further requests without
-inventing zero cost. Token-based computed costs are not provider invoices.
-No model substitution or alternate pricing tier is attempted on provider errors.
-
-See [Phase 3 implementation, verification, and limitations](docs/PHASE_3.md).
-Provider-fixture estimates and JSONL evidence are explicitly labeled; they do not
-prove live model behavior. Raw prompts/answers/arguments are excluded from traces.
-The original Phase 2 schema and all seven tool contracts are preserved.
-
-The [single-task live smoke harness](docs/LIVE_SMOKE_TEST.md) produced the supplied
-reviewed success record; see [validation scope](docs/SUCCESS_EVIDENCE_VALIDATION.md).
-Its safe preflight is
-`.venv/bin/python -m yemen_customer_service.agent.smoke --preflight`.
-The paid runner requires separate explicit approval and has a persistent
-one-attempt interlock. Fixture rehearsals do not establish live success.
-
-## Phase 4 customer interface (local synthetic demo)
-
-From the repository root, with Python 3.12.14 and uv:
+See [FINAL_VALIDATION.md](docs/FINAL_VALIDATION.md), the
+[requirements matrix](docs/REQUIREMENTS_MATRIX.md), and
+[final checklist](docs/FINAL_SUBMISSION_CHECKLIST.md) for exact outcomes and sources.
+The [one-page specification](agent_spec.md) contains all six official elements.
 
 ```sh
-uv sync --frozen
-UI_PROVIDER=fixture .venv/bin/customer-service-ui --demo
-```
-
-The launcher binds only to loopback on port 8501. Use the browser on the same
-machine; no public demo login or deployment is provided. On Windows 10, run in
-WSL2 Ubuntu because the existing backend uses POSIX file guards. No API key or
-paid model request is needed in fixture mode. `--customer demo-b` selects the
-other synthetic identity **at the trusted launcher**, never in a customer widget.
-
-Choose English or العربية. Chat can list products, explain policies, and check
-the bound customer's own order (DEMO-100 for demo-a, DEMO-200 for demo-b).
-Support-ticket requests display the exact editable draft, with distinct Confirm
-and Cancel actions. Editing revokes pending consent. Confirmation resumes the
-same task without resetting counters; cancellation makes no provider request.
-API token/cost/limit information stays in backend records and documentation.
-Product prices are ordinary store information, separate from API cost accounting.
-
-```sh
-PHASE4_EVIDENCE_DIR=artifacts/phase4-evidence .venv/bin/pytest -q --tb=short
+CADDY_TEST_BINARY=/tmp/hosting-caddy .venv/bin/pytest -q --tb=short
 .venv/bin/ruff check .
 .venv/bin/ruff format --check .
 uv pip check --python .venv/bin/python
 uv lock --check --offline
 uv build --offline
+npm ci --prefix .railway --ignore-scripts
+npm test --prefix .railway
+docker build --check .
+docker build -t customer-service-railway:review .
+git diff --check
 ```
 
-Final Phase 4 regression: **135 passed, 0 failed, 0 skipped**. The malicious
-product, forged-consent, and poisoned-memory scenarios passed their boundary
-checks with genuine MCP and explicitly scripted provider decisions. They do not
-establish live-model prompt-injection robustness. Unique ignored evidence files
-retain each run; safety blocks are not exported as explicit task-failure traces.
-See [PHASE_4.md](docs/PHASE_4.md) for workflow, security findings, commands, and limits.
-Phase 5 trace and cost documentation are complete. The separate production path
-below is prepared; do not expose this development identity workflow.
+The full suite needs a real Caddy binary; the Railway guide documents extraction.
+It exercises actual MCP subprocesses and explicitly labeled SDK/OIDC fixtures,
+not paid OpenAI or real Google login. Local headless Chromium visual/DOM checks
+are distinguished from hosted/mobile-device checks. The known cloud proxy CA
+restriction can block the full Docker build without weakening TLS; no fresh local
+image-build pass is claimed. Owner-reported Railway operation is separate evidence.
 
-
-## Invite-only hosted demo preparation
-
-[Deployment instructions](docs/DEPLOYMENT.md) and
-[security/verification details](docs/SECURE_HOSTING.md) describe the prepared
-original Render architecture: one Docker service, Caddy public proxy, loopback Streamlit,
-private stdio MCP and a dedicated persistent SQLite disk. A public login page
-requires native OIDC plus privately invited issuer/subject pairs. There are no
-shared review accounts, public development identities or preloaded customer orders.
-The production entrypoint refuses development/fixture databases and absent mounts.
-
-The default reviewer list is empty, paid calls are disabled, allowances are zero
-and the persistent kill switch is ON. Separately approved spending needs positive
-principal/global allowances, an expiry and a private operator enable action.
-Transactional reservations, one active task operation and sticky unknown-usage
-blocks survive restart. Existing task limits and exact ticket consent remain.
-No real OIDC provider, public URL, deployment or paid run is claimed by this work.
-All three original traces and the cost analysis remain byte-for-byte unchanged.
-
-Build with `docker build -t customer-service-hosted:review .`; the linked guide
-includes real-proxy test setup, locked dependency checks, secure host variables,
-assessor invitations, retention and backup cautions. Do not launch a public demo
-before the deployment/security acceptance gates in that guide. Current hosted
-verification results are recorded in docs/SECURE_HOSTING.md; provider fixtures
-and offline OIDC tests are explicitly distinguished from live execution.
-
-
-## Railway Free (preferred; conditional readiness)
-
-Use [RAILWAY_DEPLOYMENT.md](docs/RAILWAY_DEPLOYMENT.md) for current official-source
-limits, the practical deployment/secret/OIDC guide, live-chat enable steps and
-remaining acceptance. It supersedes Render as the preferred platform; do not
-apply render.yaml or select a paid plan. One persistent volume is still required.
-The native `.railway/railway.ts` configuration uses a separately locked authoring
-SDK, rather than deprecated railway.json/toml. No automatic apply/deploy runs.
-
-Current checks: **258 Python tests passed, 0 failed, 0 skipped**, one upstream
-Authlib warning; **4 offline IaC checks passed**. A local container capped at
-500 MB RAM / 1 vCPU reached a maximum across two samples of **236,281,856 bytes (225.3 MiB)** with genuine MCP,
-scripted provider calls, bilingual AppTest, consent and restart checks. This is
-fixture resource evidence, not a live Railway/OpenAI/browser capacity guarantee.
-The source lists only USD 1/month Free credit; continuous operation is not promised.
-
-Real OpenAI chat is preserved and can be enabled by private configuration and an
-explicit operator action after separate spending approval, current model/pricing
-review and deployed acceptance. Preparation used no paid requests, deployment,
-real reviewer accounts or secrets. All original traces and cost_analysis.md remain
-unchanged. Actual Free account/credit/egress, OIDC login, HTTPS/WebSockets, mobile
-review and a separately approved hosted OpenAI task remain pending.
+Text-only model proposals do not create draft forms or tickets; clearer model/tool
+instructions reduce this ambiguity but cannot guarantee live-model compliance.
+Malformed arguments remain denied. Hourly task exhaustion now has a safe localized
+wait message instead of a generic failure; limits are unchanged. The specific live
+failure is not conclusively attributed to either case without live records.
+Actual hosted ticket confirmation, post-review deployment, professor access and
+browser/provider acceptance remain required. No paid calls, live configuration
+changes, deployment or merge occurred in this final improvement workflow.

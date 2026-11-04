@@ -1,23 +1,16 @@
 # Implementation plan
 
-The next authorized preparation is the separately gated runner described in
-[LIVE_TRACE_RUNNER.md](LIVE_TRACE_RUNNER.md). It reuses the reviewed recovery
-helpers, adds durable shared allowances and permanent per-scenario locks, and is
-validated offline only. Actual paid execution and hosting remain unauthorized.
+Current authorized work is final submission polish from merged main
+`a9bae01d0d8f8ba57b97185d56bf0f5846073626`. The owner reports Railway deployment,
+Google OIDC and real OpenAI chat. Preserve the existing service, USD 3 approved
+global allowance, all data/usage/keys/invitations and the single-agent architecture.
 
-Current trace-preparation work is documented in [TRACE_SCENARIOS.md](TRACE_SCENARIOS.md):
-offline-only provider-fixture rehearsals with real MCP, a controlled test-server
-storage fault and harness-only public-read retry, plus an explicit one-turn task
-failure. No production failure policy changes or official fixture submission
-files. Live collection needs the separately bounded approval described there.
-
-Phases 1–4 are complete. Phase 5 planning, success-evidence review and offline
-trace rehearsals are authorized. Live calls and hosting require separate approval.
-Phase 2 evidence is recorded in [PHASE_2.md](PHASE_2.md) and the requirements matrix.
-Phase 3 evidence and live-validation limitations are recorded in [PHASE_3.md](PHASE_3.md).
-Phase 4 evidence and local UI limitations are recorded in [PHASE_4.md](PHASE_4.md).
-Other listed checks are future acceptance criteria. Use one agent,
-one MCP server, one SQLite database, and one Streamlit application.
+[FINAL_VALIDATION.md](FINAL_VALIDATION.md) records focused ticket/grounding/rendering
+changes, actual test/visual evidence and limits. [FINAL_DEMO_GUIDE.md](FINAL_DEMO_GUIDE.md)
+records private professor access and outstanding reviewed-commit hosted acceptance.
+No live deployment, configuration changes, paid calls or merges are authorized by
+this development task. Prior phases below are historical plans/evidence; they do
+not supersede the current owner-reported hosting status or remaining validation.
 
 ## Authoritative source and scope
 
